@@ -1,0 +1,128 @@
+C:\Users\USER\source\repos\FirstGame\bin\Debug\FirstGame.exe.config
+C:\Users\USER\source\repos\FirstGame\bin\Debug\FirstGame.exe
+C:\Users\USER\source\repos\FirstGame\bin\Debug\FirstGame.pdb
+C:\Users\USER\source\repos\FirstGame\obj\Debug\FirstGame.csprojAssemblyReference.cache
+C:\Users\USER\source\repos\FirstGame\obj\Debug\FirstGame.csproj.CoreCompileInputs.cache
+C:\Users\USER\source\repos\FirstGame\obj\Debug\FirstGame.exe
+C:\Users\USER\source\repos\FirstGame\obj\Debug\FirstGame.pdb
+C:\Users\USER\source\repos\FirstGame\bin\Debug\pictures\mat.jpg
+C:\Users\USER\source\repos\FirstGame\bin\Debug\pictures\star.png
+C:\Users\USER\source\repos\FirstGame\bin\Debug\pictures\mat1.png
+C:\Users\USER\Desktop\FirstGame\bin\Debug\pictures\mat.jpg
+C:\Users\USER\Desktop\FirstGame\bin\Debug\pictures\mat1.png
+C:\Users\USER\Desktop\FirstGame\bin\Debug\pictures\star.png
+C:\Users\USER\Desktop\FirstGame\bin\Debug\FirstGame.exe.config
+C:\Users\USER\Desktop\FirstGame\bin\Debug\FirstGame.exe
+C:\Users\USER\Desktop\FirstGame\bin\Debug\FirstGame.pdb
+C:\Users\USER\Desktop\FirstGame\obj\Debug\FirstGame.csprojAssemblyReference.cache
+C:\Users\USER\Desktop\FirstGame\obj\Debug\FirstGame.csproj.CoreCompileInputs.cache
+C:\Users\USER\Desktop\FirstGame\obj\Debug\FirstGame.exe
+C:\Users\USER\Desktop\FirstGame\obj\Debug\FirstGame.pdb
+C:\Users\USER\Desktop\FirstGame — 16.08\obj\Debug\FirstGame.csprojAssemblyReference.cache
+C:\Users\USER\Desktop\FirstGame — 16.08\obj\Debug\FirstGame.csproj.CoreCompileInputs.cache
+C:\Users\USER\Desktop\FirstGame — 16.08\obj\Debug\FirstGame.exe
+C:\Users\USER\Desktop\FirstGame — 16.08\obj\Debug\FirstGame.pdb
+C:\Users\USER\Desktop\FirstGame — 16.08\bin\Debug\pictures\mat.jpg
+C:\Users\USER\Desktop\FirstGame — 16.08\bin\Debug\pictures\mat1.png
+C:\Users\USER\Desktop\FirstGame — 16.08\bin\Debug\pictures\star.png
+C:\Users\USER\Desktop\FirstGame — 16.08\bin\Debug\FirstGame.exe.config
+C:\Users\USER\Desktop\FirstGame — 16.08\bin\Debug\FirstGame.exe
+C:\Users\USER\Desktop\FirstGame — 16.08\bin\Debug\FirstGame.pdb
+C:\Users\USER\Desktop\FirstGame — 17.08\bin\Debug\pictures\mat.jpg
+C:\Users\USER\Desktop\FirstGame — 17.08\bin\Debug\pictures\mat1.png
+C:\Users\USER\Desktop\FirstGame — 17.08\bin\Debug\pictures\star.png
+C:\Users\USER\Desktop\FirstGame — 17.08\bin\Debug\FirstGame.exe.config
+C:\Users\USER\Desktop\FirstGame — 17.08\bin\Debug\FirstGame.exe
+C:\Users\USER\Desktop\FirstGame — 17.08\bin\Debug\FirstGame.pdb
+C:\Users\USER\Desktop\FirstGame — 17.08\obj\Debug\FirstGame.csprojAssemblyReference.cache
+C:\Users\USER\Desktop\FirstGame — 17.08\obj\Debug\FirstGame.csproj.CoreCompileInputs.cache
+C:\Users\USER\Desktop\FirstGame — 17.08\obj\Debug\FirstGame.exe
+C:\Users\USER\Desktop\FirstGame — 17.08\obj\Debug\FirstGame.pdb
+C:\Users\USER\Desktop\FirstGame — 18.08\bin\Debug\pictures\mat.jpg
+C:\Users\USER\Desktop\FirstGame — 18.08\bin\Debug\pictures\mat1.png
+C:\Users\USER\Desktop\FirstGame — 18.08\bin\Debug\pictures\star.png
+C:\Users\USER\Desktop\FirstGame — 18.08\bin\Debug\FirstGame.exe.config
+C:\Users\USER\Desktop\FirstGame — 18.08\bin\Debug\FirstGame.exe
+C:\Users\USER\Desktop\FirstGame — 18.08\bin\Debug\FirstGame.pdb
+C:\Users\USER\Desktop\FirstGame — 18.08\obj\Debug\FirstGame.csprojAssemblyReference.cache
+C:\Users\USER\Desktop\FirstGame — 18.08\obj\Debug\FirstGame.csproj.CoreCompileInputs.cache
+C:\Users\USER\Desktop\FirstGame — 18.08\obj\Debug\FirstGame.exe
+C:\Users\USER\Desktop\FirstGame — 18.08\obj\Debug\FirstGame.pdb
+C:\Users\USER\Desktop\FirstGame — 19.08\bin\Debug\pictures\mat.jpg
+C:\Users\USER\Desktop\FirstGame — 19.08\bin\Debug\pictures\mat1.png
+C:\Users\USER\Desktop\FirstGame — 19.08\bin\Debug\pictures\star.png
+C:\Users\USER\Desktop\FirstGame — 19.08\bin\Debug\FirstGame.exe.config
+C:\Users\USER\Desktop\FirstGame — 19.08\bin\Debug\FirstGame.exe
+C:\Users\USER\Desktop\FirstGame — 19.08\bin\Debug\FirstGame.pdb
+C:\Users\USER\Desktop\FirstGame — 19.08\obj\Debug\FirstGame.csprojAssemblyReference.cache
+C:\Users\USER\Desktop\FirstGame — 19.08\obj\Debug\FirstGame.csproj.CoreCompileInputs.cache
+C:\Users\USER\Desktop\FirstGame — 19.08\obj\Debug\FirstGame.exe
+C:\Users\USER\Desktop\FirstGame — 19.08\obj\Debug\FirstGame.pdb
+C:\Users\USER\Desktop\FirstGame — 21.08\obj\Debug\FirstGame.csprojAssemblyReference.cache
+C:\Users\USER\Desktop\FirstGame — 21.08\obj\Debug\FirstGame.csproj.CoreCompileInputs.cache
+C:\Users\USER\Desktop\FirstGame — 21.08\obj\Debug\FirstGame.exe
+C:\Users\USER\Desktop\FirstGame — 21.08\obj\Debug\FirstGame.pdb
+C:\Users\USER\Desktop\FirstGame — 21.08\bin\Debug\pictures\mat.jpg
+C:\Users\USER\Desktop\FirstGame — 21.08\bin\Debug\pictures\mat1.png
+C:\Users\USER\Desktop\FirstGame — 21.08\bin\Debug\pictures\star.png
+C:\Users\USER\Desktop\FirstGame — 21.08\bin\Debug\FirstGame.exe.config
+C:\Users\USER\Desktop\FirstGame — 21.08\bin\Debug\FirstGame.exe
+C:\Users\USER\Desktop\FirstGame — 21.08\bin\Debug\FirstGame.pdb
+C:\Users\USER\Desktop\FirstGame — 22.08\bin\Debug\pictures\mat.jpg
+C:\Users\USER\Desktop\FirstGame — 22.08\bin\Debug\FirstGame.exe.config
+C:\Users\USER\Desktop\FirstGame — 22.08\bin\Debug\FirstGame.exe
+C:\Users\USER\Desktop\FirstGame — 22.08\bin\Debug\FirstGame.pdb
+C:\Users\USER\Desktop\FirstGame — 22.08\obj\Debug\FirstGame.csprojAssemblyReference.cache
+C:\Users\USER\Desktop\FirstGame — 22.08\obj\Debug\FirstGame.csproj.CoreCompileInputs.cache
+C:\Users\USER\Desktop\FirstGame — 22.08\obj\Debug\FirstGame.exe
+C:\Users\USER\Desktop\FirstGame — 22.08\obj\Debug\FirstGame.pdb
+C:\Users\USER\Desktop\FirstGame — 22.08\bin\Debug\pictures\boss.png
+C:\Users\USER\Desktop\FirstGame — 22.08\bin\Debug\Program.cs
+C:\Users\USER\Desktop\FirstGame — 22.08\bin\Debug\pictures\ship.png
+C:\Users\USER\Desktop\FirstGame — 22.08\bin\Debug\pictures\fireball2.png
+C:\Users\USER\Desktop\FirstGame — 22.08\bin\Debug\pictures\bullet2.png
+C:\Users\USER\Desktop\FirstGame — 22.08\bin\Debug\pictures\bullet1.png
+C:\Users\USER\Desktop\FirstGame — 22.08\bin\Debug\pictures\star1.png
+C:\Users\USER\Desktop\FirstGame — 22.08\bin\Debug\pictures\star.png
+C:\Users\USER\Desktop\FirstGame — 22.08\bin\Debug\pictures\rocket.png
+C:\Users\USER\Desktop\FirstGame — 22.08\bin\Debug\pictures\bonus.png
+C:\Users\USER\Desktop\FirstGame — 22.08\bin\Debug\pictures\asteroid.png
+C:\Users\USER\Desktop\FirstGame — 22.08\bin\Debug\pictures\charge.png
+C:\Users\USER\Desktop\Game\FirstGame — 22.08\bin\Debug\pictures\asteroid.png
+C:\Users\USER\Desktop\Game\FirstGame — 22.08\bin\Debug\pictures\bonus.png
+C:\Users\USER\Desktop\Game\FirstGame — 22.08\bin\Debug\pictures\bullet2.png
+C:\Users\USER\Desktop\Game\FirstGame — 22.08\bin\Debug\pictures\charge.png
+C:\Users\USER\Desktop\Game\FirstGame — 22.08\bin\Debug\pictures\fireball2.png
+C:\Users\USER\Desktop\Game\FirstGame — 22.08\bin\Debug\pictures\bullet1.png
+C:\Users\USER\Desktop\Game\FirstGame — 22.08\bin\Debug\pictures\mat.jpg
+C:\Users\USER\Desktop\Game\FirstGame — 22.08\bin\Debug\pictures\boss.png
+C:\Users\USER\Desktop\Game\FirstGame — 22.08\bin\Debug\pictures\rocket.png
+C:\Users\USER\Desktop\Game\FirstGame — 22.08\bin\Debug\pictures\ship.png
+C:\Users\USER\Desktop\Game\FirstGame — 22.08\bin\Debug\pictures\star.png
+C:\Users\USER\Desktop\Game\FirstGame — 22.08\bin\Debug\pictures\star1.png
+C:\Users\USER\Desktop\Game\FirstGame — 22.08\bin\Debug\Program.cs
+C:\Users\USER\Desktop\Game\FirstGame — 22.08\bin\Debug\FirstGame.exe.config
+C:\Users\USER\Desktop\Game\FirstGame — 22.08\bin\Debug\FirstGame.exe
+C:\Users\USER\Desktop\Game\FirstGame — 22.08\bin\Debug\FirstGame.pdb
+C:\Users\USER\Desktop\Game\FirstGame — 22.08\obj\Debug\FirstGame.csprojAssemblyReference.cache
+C:\Users\USER\Desktop\Game\FirstGame — 22.08\obj\Debug\FirstGame.csproj.CoreCompileInputs.cache
+C:\Users\USER\Desktop\Game\FirstGame — 22.08\obj\Debug\FirstGame.exe
+C:\Users\USER\Desktop\Game\FirstGame — 22.08\obj\Debug\FirstGame.pdb
+C:\Users\USER\Desktop\Game\FirstGame — 31.08\bin\Debug\pictures\asteroid.png
+C:\Users\USER\Desktop\Game\FirstGame — 31.08\bin\Debug\pictures\bonus.png
+C:\Users\USER\Desktop\Game\FirstGame — 31.08\bin\Debug\pictures\bullet2.png
+C:\Users\USER\Desktop\Game\FirstGame — 31.08\bin\Debug\pictures\charge.png
+C:\Users\USER\Desktop\Game\FirstGame — 31.08\bin\Debug\pictures\fireball2.png
+C:\Users\USER\Desktop\Game\FirstGame — 31.08\bin\Debug\pictures\bullet1.png
+C:\Users\USER\Desktop\Game\FirstGame — 31.08\bin\Debug\pictures\boss.png
+C:\Users\USER\Desktop\Game\FirstGame — 31.08\bin\Debug\pictures\rocket.png
+C:\Users\USER\Desktop\Game\FirstGame — 31.08\bin\Debug\pictures\ship.png
+C:\Users\USER\Desktop\Game\FirstGame — 31.08\bin\Debug\pictures\star.png
+C:\Users\USER\Desktop\Game\FirstGame — 31.08\bin\Debug\Program.cs
+C:\Users\USER\Desktop\Game\FirstGame — 31.08\bin\Debug\FirstGame.exe.config
+C:\Users\USER\Desktop\Game\FirstGame — 31.08\bin\Debug\FirstGame.exe
+C:\Users\USER\Desktop\Game\FirstGame — 31.08\bin\Debug\FirstGame.pdb
+C:\Users\USER\Desktop\Game\FirstGame — 31.08\obj\Debug\FirstGame.csprojAssemblyReference.cache
+C:\Users\USER\Desktop\Game\FirstGame — 31.08\obj\Debug\FirstGame.csproj.CoreCompileInputs.cache
+C:\Users\USER\Desktop\Game\FirstGame — 31.08\obj\Debug\FirstGame.exe
+C:\Users\USER\Desktop\Game\FirstGame — 31.08\obj\Debug\FirstGame.pdb
