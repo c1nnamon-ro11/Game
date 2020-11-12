@@ -10,8 +10,8 @@ namespace FirstGame
         {
             //Initialization and game size
             Form GameScreen = new Form();
-            GameScreen.Width = 1440;
-            GameScreen.Height = 900;
+            GameScreen.Width = 1920;
+            GameScreen.Height = 1080;           
             GameFunctional.Initialization(GameScreen);
             GameScreen.Show();
             GameFunctional.Drawing();
