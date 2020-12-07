@@ -2,7 +2,8 @@
 using System.Windows.Forms;
 using System.Drawing;
 using System.Collections.Generic;
-
+using System.Media;
+using System.IO;
 
 namespace FirstGame
 {
@@ -14,6 +15,14 @@ namespace FirstGame
         static int counter;
         static bool startGame;
 
+        static System.Windows.Media.MediaPlayer menuMusic = new System.Windows.Media.MediaPlayer();
+        static System.Windows.Media.MediaPlayer gameMusic = new System.Windows.Media.MediaPlayer();
+        static System.Windows.Media.MediaPlayer bossMusic = new System.Windows.Media.MediaPlayer();
+        static System.Windows.Media.MediaPlayer hitSound = new System.Windows.Media.MediaPlayer();
+        static System.Windows.Media.MediaPlayer shotSound = new System.Windows.Media.MediaPlayer();
+        static System.Windows.Media.MediaPlayer bossShotSound = new System.Windows.Media.MediaPlayer();
+        static System.Windows.Media.MediaPlayer bonusSound = new System.Windows.Media.MediaPlayer();
+        static System.Windows.Media.MediaPlayer gameOverSound = new System.Windows.Media.MediaPlayer();
         //Class fields 
         //Objects that displayed and interact
         //static BaseObject[] objs;
@@ -63,6 +72,11 @@ namespace FirstGame
         //Initialization game screen
         static public void Initialization(Form GameScreen)
         {
+            menuMusic.Open(new System.Uri("Content\\Sounds\\EricSkiffUnderclocked.mp3", UriKind.Relative));
+            menuMusic.Volume = 0.1;
+            menuMusic.MediaEnded += new EventHandler(Media_Ended);
+            menuMusic.Play();
+
             Graphics grx;
             context = BufferedGraphicsManager.Current;
             grx = GameScreen.CreateGraphics();
@@ -75,9 +89,24 @@ namespace FirstGame
 
             //Events
             GameScreen.KeyDown += GameScreen_KeyDown;   //Ship control
-            GameScreen.KeyUp += GameScreen_KeyUp; ;
+            GameScreen.KeyUp += GameScreen_KeyUp;
             Ship.MessageDie += Finish;                  //End Game
             CountPlus += Game_Counter;                  //Bullet count
+        }
+
+        private static void Media_Ended(object sender, EventArgs e)
+        {
+            if (menuMusic.NaturalDuration <= menuMusic.Position)
+            {
+                menuMusic.Position = TimeSpan.Zero;
+                menuMusic.Play();
+            }
+
+            if (gameMusic.NaturalDuration <= gameMusic.Position)
+            {
+                gameMusic.Position = TimeSpan.Zero;
+                gameMusic.Play();
+            }
         }
 
         private static void GameScreen_KeyUp(object sender, KeyEventArgs e)
@@ -86,6 +115,7 @@ namespace FirstGame
             {
                 Clear();
                 Load();
+                BackMusic();
                 startGame = true;
             }
             if (e.KeyCode == Keys.Up)
@@ -221,7 +251,7 @@ namespace FirstGame
         static public void startGameMessage()
         {
             //Game menu
-            startGameMenu.Interval = 10;
+            startGameMenu.Interval = 1;
             startGameMenu.Start();
             startGameMenu.Tick += StartGameMenu_Tick;
         }
@@ -229,8 +259,8 @@ namespace FirstGame
         {
             if(startGame) startGameMenu.Stop();
             buffer.Graphics.DrawString(
-                "Press any key to start", new Font(FontFamily.GenericSansSerif, 60, FontStyle.Underline),
-                Brushes.White, Width / 2 - 200, Height / 2 - 100);
+                "Press any key to start", new Font(FontFamily.GenericSansSerif, 30),
+                Brushes.White, Width / 3, Height / 4*3);
             buffer.Render();
         }
 
@@ -238,33 +268,37 @@ namespace FirstGame
         //Ship bullet exception handler
         private static void ShotTimer_Tick(object sender, EventArgs e)
         {
-            //Shot mechanic (Lvl - ship level and number of bullets according to the standard principle)
-            int numberOfBullets = ship.Lvl;
-
-            //Determining type of bullets
-            if (numberOfBullets > 6) numberOfBullets = 6;
-            bool superBullet = false;
-            if (numberOfBullets > 3)
+            if (startGame)
             {
-                superBullet = true;
-                numberOfBullets -= 3;
-            }
+                ShotSound();
+                //Shot mechanic (Lvl - ship level and number of bullets according to the standard principle)
+                int numberOfBullets = ship.Lvl;
 
-            //Generating bullets according to ship lvl
-            for (int i = -numberOfBullets / 2; i <= numberOfBullets / 2; i++)
-            {
-                //First type of bullets
-                if (numberOfBullets % 2 == 0 && i == 0 && numberOfBullets != 0) { continue; }
-                if (superBullet) bullets.Add(new Bullet(new Point(ship.Rect.X + 10, ship.Rect.Y + i * 8 + ship.Size / 2-1), new Point(4, 0), new Size(6, 2)));
+                //Determining type of bullets
+                if (numberOfBullets > 6) numberOfBullets = 6;
+                bool superBullet = false;
+                if (numberOfBullets > 3)
+                {
+                    superBullet = true;
+                    numberOfBullets -= 3;
+                }
 
-                //Second type of bullets
-                else bullets.Add(new Bullet(new Point(ship.Rect.X + 10, ship.Rect.Y +ship.Size/2-1), new Point(4, i), new Size(4, 1)));
+                //Generating bullets according to ship lvl
+                for (int i = -numberOfBullets / 2; i <= numberOfBullets / 2; i++)
+                {
+                    //First type of bullets
+                    if (numberOfBullets % 2 == 0 && i == 0 && numberOfBullets != 0) { continue; }
+                    if (superBullet) bullets.Add(new Bullet(new Point(ship.Rect.X + 10, ship.Rect.Y + i * 8 + ship.Size / 2 - 1), new Point(4, 0), new Size(6, 2)));
 
-                //Data transfer to constructor
-                bullets[index].Lvl = ship.Lvl;
-                index++;
-            }
-            CountPlus();
+                    //Second type of bullets
+                    else bullets.Add(new Bullet(new Point(ship.Rect.X + 10, ship.Rect.Y + ship.Size / 2 - 1), new Point(4, i), new Size(4, 1)));
+
+                    //Data transfer to constructor
+                    bullets[index].Lvl = ship.Lvl;
+                    index++;
+                }
+                CountPlus();
+            }          
         }
 
         //Previous version of shooting
@@ -337,6 +371,7 @@ namespace FirstGame
                                 new Point(2*ich ,2*jch), new Size(20, 14)));
                     }
                 }
+                BossShotSound();
             }
         }
 
@@ -424,7 +459,7 @@ namespace FirstGame
                 {
                     if (bullets[j].Collision(asteroids[i]))
                     {
-                        System.Media.SystemSounds.Exclamation.Play();
+                        HitSound();
                         asteroids[i].PowerLow(bullets[j].Power);    //Object "power" reduction
 
                         if (asteroids[i].Power <= 0)    //Procedure or destroyingobject (if power less then zero)
@@ -456,9 +491,9 @@ namespace FirstGame
                             }
                             else
                             {
-                                Console.WriteLine(asteroids.Count);
+                                /*Console.WriteLine(asteroids.Count);
                                 Console.WriteLine(!bossFight);
-                                Console.WriteLine(initialNumberOfAsteroids);
+                                Console.WriteLine(initialNumberOfAsteroids);*/
                             }
                             if (i != 0) i--;
                             else break;
@@ -472,23 +507,23 @@ namespace FirstGame
                     //Collision of object and ship
                     if (ship.Collision(asteroids[i]))
                     {
+                        HitSound();
                         VisualEffect(2, asteroids[i].PosX + asteroids[i].Size / 2, asteroids[i].PosY + asteroids[i].Size / 2);  //Spawn in place of the object"visual effects"
                         //Changing the characteristics of the ship
                         ship.EnergyLow(15);
                         ship.LvlUp(-1);
+                        if (ship.Energy <= 0) ship.Die();
                         ship.ScoreUp(asteroids[i].Size);
                         if (!bossFight) ship.BossTimeUp(asteroids[i].Size);
 
                         //A similar procedure destroying object
-                        asteroids.RemoveAt(i);
-                        if (ship.Energy <= 0) ship.Die();
+                        asteroids.RemoveAt(i);                       
                         if (asteroids.Count < initialNumberOfAsteroids && !bossFight)
                         {
                             LoadAsteroids(1);
                         }
                         if (i != 0) i--;
                         else break;
-                        System.Media.SystemSounds.Hand.Play();
                     }
                 }
             }
@@ -503,7 +538,7 @@ namespace FirstGame
                 {
                     if (bullets[j].Collision(charges[i]))
                     {
-                        System.Media.SystemSounds.Exclamation.Play();
+                        HitSound();
                         charges[i].PowerLow(bullets[j].Power);  //Object "power" reduction
                         if (charges[i].Power <= 0) //Procedure or destroyingobject (if power less then zero)
                         {
@@ -524,15 +559,15 @@ namespace FirstGame
                     //Collision of object and ship
                     if (ship.Collision(charges[i]))
                     {
+                        HitSound();
                         VisualEffect(2, charges[i].PosX + charges[i].Size / 2, charges[i].PosY + charges[i].Size / 2);
                         ship.EnergyLow(5);
+                        if (ship.Energy <= 0) ship.Die();
                         ship.ScoreUp(0);
                         if (!bossFight) ship.BossTimeUp(charges[i].Size);
-                        charges.RemoveAt(i);
-                        if (ship.Energy <= 0) ship.Die();
+                        charges.RemoveAt(i);                        
                         if (i != 0) i--;
                         else break;
-                        System.Media.SystemSounds.Hand.Play();
                     }
                 }
             }
@@ -546,7 +581,7 @@ namespace FirstGame
                 {
                     if (bullets[j].Collision(stars[i]))
                     {
-                        System.Media.SystemSounds.Exclamation.Play();
+                        HitSound();
                         stars[i].PowerLow(bullets[j].Power);    //Object "power" reduction
                         if (stars[i].Power <= 0)    //Procedure or destroyingobject (if power less then zero)
                         {
@@ -569,19 +604,19 @@ namespace FirstGame
                     //Collision of object and ship 
                     if (ship.Collision(stars[i]))
                     {
+                        HitSound();
                         VisualEffect(2, stars[i].PosX + stars[i].Size / 2, stars[i].PosY + stars[i].Size / 2); //Spawn in place of the object"visual effects"
                         ship.EnergyLow(10);
+                        if (ship.Energy <= 0) ship.Die();
                         ship.ScoreUp(stars[i].Size);
                         if (!bossFight) ship.BossTimeUp(stars[i].Size);
-                        stars.RemoveAt(i);
-                        if (ship.Energy <= 0) ship.Die();
+                        stars.RemoveAt(i);                       
                         if (stars.Count == 0 && !bossFight)
                         {
                             LoadStars();
                         }
                         if (i != 0) i--;
                         else break;
-                        System.Media.SystemSounds.Hand.Play();
                         if (stars.Count == 0 && !bossFight) LoadStars();
                     } 
                 }
@@ -597,7 +632,7 @@ namespace FirstGame
                 {
                     if (bullets[j].Collision(images[i]))
                     {
-                        System.Media.SystemSounds.Exclamation.Play();
+                        HitSound();
                         images[i].PowerLow(bullets[j].Power);   //Object "power" reduction
                         if (images[i].Power <= 0)   //Procedure or destroyingobject (if power less then zero)
                         {
@@ -620,8 +655,10 @@ namespace FirstGame
                     //Collision of object and ship
                     if (ship.Collision(images[i]))
                     {
+                        HitSound();
                         VisualEffect(2, images[i].PosX + images[i].Size / 2, images[i].PosY + images[i].Size / 2); //Spawn in place of the object"visual effects"
                         ship.EnergyLow(10);
+                        if (ship.Energy <= 0) ship.Die();
                         ship.ScoreUp(images[i].Size);
                         if (!bossFight) ship.BossTimeUp(images[i].Size);
                         images.RemoveAt(i);
@@ -631,9 +668,7 @@ namespace FirstGame
                             LoadImages();
                         }
                         if (i != 0) i--;
-                        else break;
-                        System.Media.SystemSounds.Hand.Play();
-                        if (ship.Energy <= 0) ship.Die();
+                        else break;                        
                         if (images.Count == 0 && !bossFight) LoadImages();
                     }
                 }
@@ -653,7 +688,7 @@ namespace FirstGame
                     bonus.RemoveAt(i);
                     i--;
                     if (ship.Lvl > 6) { ship.EnergyLow(-100); }//increase HP if the level is greater than the specified
-                    System.Media.SystemSounds.Beep.Play();
+                    BonusSound();
                 }
             }
 
@@ -670,7 +705,7 @@ namespace FirstGame
                     //Collision of object and bullet
                     if (bullets[j].Collision(boss[i]))
                     {
-                        System.Media.SystemSounds.Exclamation.Play();
+                        HitSound();
                         boss[i].PowerLow(bullets[j].Power); //Object "power" reduction
                         //Spawn in boss place charges
                         int n = 1;
@@ -688,13 +723,15 @@ namespace FirstGame
                         //Boss destoring procedure
                         if (boss[i].Power <= 0)
                         {
+                            BonusSound();
+                            ship.LvlUp(1);
                             bossFight = false;
                             VisualEffect(5, boss[i].PosX + boss[i].Size / 2, boss[i].PosY + boss[i].Size / 2);  //Spawn in place of the object of "visual effects
                             ship.ScoreUp(5000);
                             bonusTime += 25;
                             boss.RemoveAt(i);
-                            Console.WriteLine("Boss defeated");
-                            Console.WriteLine(bossFight);
+                            /*Console.WriteLine("Boss defeated");
+                            Console.WriteLine(bossFight);*/
                             bossShotTimer.Stop();
                             Load();
                             if (i != 0) i--;
@@ -727,14 +764,16 @@ namespace FirstGame
                 //Collision of object and ship
                 if (ship.Collision(enemyBullets[i]))
                 {
+                    HitSound();
+                    ship.EnergyLow(5);
                     VisualEffect(2, enemyBullets[i].PosX + enemyBullets[i].Size / 2, enemyBullets[i].PosY + enemyBullets[i].Size / 2); //Spawn in place of the object of "visual effects
+                    if (ship.Energy <= 0) ship.Die();
+                    enemyBullets.RemoveAt(i);
                     if (i != 0) i--; else break;
-                        System.Media.SystemSounds.Hand.Play();
-                        if (ship.Energy <= 0) ship.Die();
                 }
             }
 
-            if (!bossFight && ship.BossTime >= 1000) LoadBoss();//Boss spawn
+            if (!bossFight && ship.BossTime >= 3000) { LoadBoss(); BossFightMusic(); }//Boss spawn
             if (bonusTime*300<ship.Score) LoadBonus();//Bonus spawn
 
             //"Clearing the memory" of bullets that out of the playing field
@@ -793,7 +832,7 @@ namespace FirstGame
                 int size = 70;
                 asteroids.Add(new Asteroid(
                     new Point(
-                        Width  + GameFunctional.rnd.Next(100, 400), Height / 2 - GameFunctional.rnd.Next(0, 400)),
+                        Width  + GameFunctional.rnd.Next(100, 400), Height / 2 - GameFunctional.rnd.Next(-200, 200)),
                     new Point(-speedX, speedY), new Size(size, size)));
             }
             //initialNumberOfAsteroids++;
@@ -808,7 +847,7 @@ namespace FirstGame
                 int size = 70;
                 asteroids.Add(new Asteroid(
                     new Point(
-                        Width + GameFunctional.rnd.Next(100, 400), Height / 2 - GameFunctional.rnd.Next(0, 400)),
+                        Width + GameFunctional.rnd.Next(100, 400), Height / 2 - GameFunctional.rnd.Next(-200, 200)),
                     new Point(-speedX, speedY), new Size(size, size)));
             }
         }
@@ -876,21 +915,38 @@ namespace FirstGame
             scoreTimer.Stop();
             shotTimer.Stop();
             bossShotTimer.Stop();
+
+            gameMusic.Stop();
+            gameOverSound.Open(new System.Uri("Content\\Sounds\\GameOver.mp3", UriKind.Relative));
+            gameOverSound.Volume = 0.1;
+            gameOverSound.Play();
+
             //Display information
             buffer.Graphics.DrawString(
                 "The End", new Font(FontFamily.GenericSansSerif, 60, FontStyle.Underline), 
                 Brushes.White, Width / 2-200, Height / 2 - 100);
             buffer.Graphics.DrawString(
                 "Your score:"+ship.Score, new Font(FontFamily.GenericSansSerif,30),
-                Brushes.Bisque, Width / 2-200, Height / 2 );
+                Brushes.Bisque, Width / 2-180, Height / 2 );
             buffer.Render();
+
+            //ScoreMenu
+            if (MessageBox.Show("Want to save your record at scoreboard?", "Asteroids belt", MessageBoxButtons.YesNo) == DialogResult.Yes)
+            {
+                ScoreMenu scoreMenu = new ScoreMenu(350,200, ship.Score);
+                scoreMenu.Size = new Size(350, 200);
+                scoreMenu.StartPosition = FormStartPosition.CenterParent;
+                scoreMenu.Text = "Asteroid Belt";
+                scoreMenu.ShowDialog();
+            }
+            Application.Exit();
         }
 
         //Background
         static public void BackGround()
         {            
             GameFunctional.buffer.Graphics.DrawImage
-                (Image.FromFile("pictures//planet.png"), new Rectangle(1000, 100, 100, 100));
+                (Image.FromFile("Content\\pictures\\planet.png"), new Rectangle(1000, 100, 100, 100));
 
             Random rnd = new Random();
                 int Num = rnd.Next(10, 100);
@@ -918,6 +974,47 @@ namespace FirstGame
                         new Point(3 * ich + rnd.Next(-7, 7), 3 * jch + rnd.Next(-7, 7)), new Size(5, 5)));
                 }
             }
+        }
+
+        static public void BackMusic()
+        {       
+            menuMusic.Stop();
+            menuMusic.Close();
+            gameMusic.Open(new System.Uri("Content\\Sounds\\MusicBack.mp3", UriKind.Relative));
+            gameMusic.Volume = 0.1;
+            gameMusic.MediaEnded += new EventHandler(Media_Ended);
+            gameMusic.Play();
+        }
+        static public void BossFightMusic()
+        {
+            bossMusic.Open(new System.Uri("Content\\Sounds\\BossStart.mp3", UriKind.Relative));
+            bossMusic.Volume = 0.1;
+            bossMusic.Play();
+        }
+       
+        static public void HitSound()
+        {
+            hitSound.Open(new System.Uri("Content\\Sounds\\Hit.mp3", UriKind.Relative));
+            hitSound.Volume = 0.1;
+            hitSound.Play();
+        }
+        static public void ShotSound()
+        {
+            shotSound.Open(new System.Uri("Content\\Sounds\\Shot.mp3", UriKind.Relative));
+            shotSound.Volume = 0.1;
+            shotSound.Play();
+        }
+        static public void BossShotSound()
+        {
+            bossShotSound.Open(new System.Uri("Content\\Sounds\\PowerShot.mp3", UriKind.Relative));
+            bossShotSound.Volume = 0.1;
+            bossShotSound.Play();
+        }
+        static public void BonusSound()
+        {
+            bonusSound.Open(new System.Uri("Content\\Sounds\\Bonus.mp3", UriKind.Relative));
+            bonusSound.Volume = 0.2;
+            bonusSound.Play();
         }
     }
 }

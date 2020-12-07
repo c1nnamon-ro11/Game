@@ -80,7 +80,7 @@ namespace FirstGame
     class Star : BaseObject
     {
         //Image at screen
-        Image img = Image.FromFile("pictures\\star.png");
+        Image img = Image.FromFile("Content\\pictures\\star.png");
 
         //Constructor with "power"
         public Star(Point pos, Point dir, Size size) : base(pos, dir, size)
@@ -107,7 +107,7 @@ namespace FirstGame
                 pos.Y = GameFunctional.rnd.Next(0, GameFunctional.Height);
             }
             if (pos.Y < 0) dir.Y = -dir.Y;
-            if (pos.Y > GameFunctional.Height) dir.Y = -dir.Y;
+            if (pos.Y + Size > GameFunctional.Height) dir.Y = -dir.Y;
         }
     }
 
@@ -116,7 +116,7 @@ namespace FirstGame
     class Rocket : BaseObject
     {
         //Image at screen
-        Image img = Image.FromFile("pictures\\rocket.png");
+        Image img = Image.FromFile("Content\\pictures\\rocket.png");
 
         //Constructor with "power"
         public Rocket(Point pos,Point dir, Size size):base(pos,dir,size)
@@ -148,7 +148,7 @@ namespace FirstGame
     class Asteroid : BaseObject
     {
         //Image at screen
-        Image img = Image.FromFile("pictures\\asteroid.png");
+        Image img = Image.FromFile("Content\\pictures\\asteroid.png");
 
         //Constructor with "power"
         public Asteroid(Point pos,Point dir,Size size):base(pos,dir,size)
@@ -174,7 +174,7 @@ namespace FirstGame
                 pos.Y = GameFunctional.rnd.Next(0, GameFunctional.Height);
             }
             if (pos.Y < 0) dir.Y = -dir.Y;
-            if (pos.Y > GameFunctional.Height) dir.Y = -dir.Y;
+            if (pos.Y+Size > GameFunctional.Height) dir.Y = -dir.Y;
         }
     }
 
@@ -183,7 +183,7 @@ namespace FirstGame
     class AsteroidCharge : BaseObject
     {
         //Image at screen
-        Image img = Image.FromFile("pictures\\charge.png");
+        Image img = Image.FromFile("Content\\pictures\\charge.png");
         //Constructor with "power"
         public AsteroidCharge(Point pos, Point dir, Size size) : base(pos, dir, size)
         {
@@ -222,7 +222,7 @@ namespace FirstGame
         int bossTime=0;                         //Score for spawn new boss target
 
         //Image at screen
-        Image img = Image.FromFile("pictures\\ship.png");
+        Image img = Image.FromFile("Content\\pictures\\ship.png");
 
         //Properties (HP,Score, Boss score)
         public int Energy
@@ -309,8 +309,8 @@ namespace FirstGame
     class Bullet : Ship
     {
         //Images at screen
-        Image img1 = Image.FromFile("pictures\\bullet1.png");
-        Image img2 = Image.FromFile("pictures\\bullet2.png");
+        Image img1 = Image.FromFile("Content\\pictures\\bullet1.png");
+        Image img2 = Image.FromFile("Content\\pictures\\bullet2.png");
 
         //Overloading (because we have 2 types of bullets)
         public override int Power
@@ -343,7 +343,7 @@ namespace FirstGame
     class BonusUp : Ship
     {
         //Image at screen
-        Image img = Image.FromFile("pictures\\bonus.png");
+        Image img = Image.FromFile("Content\\pictures\\bonus.png");
         //Constructor
         public BonusUp(Point pos, Point dir, Size size) : base(pos, dir, size)
         {
@@ -361,7 +361,7 @@ namespace FirstGame
             pos.X = pos.X + dir.X;
             pos.Y = pos.Y + dir.Y;
             if (pos.Y < Size) dir.Y = -dir.Y;
-            if (pos.Y > GameFunctional.Height) dir.Y = -dir.Y;
+            if (pos.Y + Size > GameFunctional.Height) dir.Y = -dir.Y;
         }
     }
 
@@ -370,7 +370,7 @@ namespace FirstGame
     class Boss : BaseObject
     {
         //Image at screen
-        Image img = Image.FromFile("pictures\\boss.png");
+        Image img = Image.FromFile("Content\\pictures\\boss.png");
         //Constructor
         public Boss(Point pos, Point dir, Size size) : base(pos, dir, size)
         {
@@ -391,9 +391,9 @@ namespace FirstGame
             pos.Y = pos.Y + dir.Y;
 
             if (pos.X < GameFunctional.Width / 2) dir.X= GameFunctional.rnd.Next(2, 5); 
-            if (pos.X > GameFunctional.Width - 350) dir.X = -GameFunctional.rnd.Next(2, 5);
+            if (pos.X > GameFunctional.Width - Size) dir.X = -GameFunctional.rnd.Next(2, 5);
             if (pos.Y < 0) dir.Y = GameFunctional.rnd.Next(2, 5);
-            if (pos.Y > GameFunctional.Height - 350) dir.Y = -GameFunctional.rnd.Next(2, 5);
+            if (pos.Y > GameFunctional.Height - Size) dir.Y = -GameFunctional.rnd.Next(2, 5);
         }
     }
 
@@ -402,7 +402,7 @@ namespace FirstGame
     class EnemyBullets : Boss
     {
         //Image at screen
-        Image img = Image.FromFile("pictures\\fireball2.png");
+        Image img = Image.FromFile("Content\\pictures\\fireball2.png");
         //Constructor
         public EnemyBullets(Point pos, Point dir, Size size) : base(pos, dir, size)
         {
