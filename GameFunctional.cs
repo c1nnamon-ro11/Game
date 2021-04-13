@@ -4,16 +4,20 @@ using System.Drawing;
 using System.Collections.Generic;
 using System.Media;
 using System.IO;
+using System.IO.Ports;
+using System.Threading;
 
 namespace FirstGame
 {
-    static class GameFunctional
+    public static class GameFunctional
     {
         //Delegete,event and value for bullets counting
         public delegate void Count();
         public static event Count CountPlus;
+        public static event Count Shot;
         static int counter;
         static bool startGame;
+        static SerialPort serialPort;
 
         static System.Windows.Media.MediaPlayer menuMusic = new System.Windows.Media.MediaPlayer();
         static System.Windows.Media.MediaPlayer gameMusic = new System.Windows.Media.MediaPlayer();
@@ -32,7 +36,7 @@ namespace FirstGame
         static int index = 0; //Bullet control (2 types of bullet)
         static List<Asteroid> asteroids = new List<Asteroid>();
         static List<Rocket> images = new List<Rocket>();
-        static List<Star> stars = new List<Star>();
+        public static List<Star> stars = new List<Star>();
         static List<BonusUp> bonus = new List<BonusUp>();
         static List<Boss> boss = new List<Boss>();
         static List<EnemyBullets> enemyBullets = new List<EnemyBullets>();
@@ -47,12 +51,15 @@ namespace FirstGame
         static int bonusTime = 0;
         static bool bossFight = false; //boss flag
 
+        static bool autoFire=true;
+        static bool controller;//if controller - false, autoFire always true
+
         //Random number generation and timers for screen refresh, points, automatic player and boss shots
-        static Timer timer = new Timer();
-        static Timer scoreTimer = new Timer();
-        static Timer shotTimer = new Timer();
-        static Timer bossShotTimer = new Timer();
-        static Timer startGameMenu = new Timer();
+        static System.Windows.Forms.Timer timer = new System.Windows.Forms.Timer();
+        static System.Windows.Forms.Timer scoreTimer = new System.Windows.Forms.Timer();
+        static System.Windows.Forms.Timer shotTimer = new System.Windows.Forms.Timer();
+        static System.Windows.Forms.Timer bossShotTimer = new System.Windows.Forms.Timer();
+        static System.Windows.Forms.Timer startGameMenu = new System.Windows.Forms.Timer();
         static public Random rnd = new Random();
 
         //buffers that change and output
@@ -77,6 +84,15 @@ namespace FirstGame
             menuMusic.MediaEnded += new EventHandler(Media_Ended);
             menuMusic.Play();
 
+
+            //Arduino
+            serialPort = new SerialPort();
+            serialPort.PortName = "COM4";
+            serialPort.BaudRate = 19200;
+            try { serialPort.Open(); controller = true; }
+            catch { controller = false; }
+            if (controller) autoFire = false;
+
             Graphics grx;
             context = BufferedGraphicsManager.Current;
             grx = GameScreen.CreateGraphics();
@@ -86,12 +102,13 @@ namespace FirstGame
             Load();     //Initial loading of objects
             Timer();    //Initialize and run all timers
             startGameMessage();
-
+           
             //Events
             GameScreen.KeyDown += GameScreen_KeyDown;   //Ship control
             GameScreen.KeyUp += GameScreen_KeyUp;
             Ship.MessageDie += Finish;                  //End Game
             CountPlus += Game_Counter;                  //Bullet count
+            Shot += ShotTimer_Tick;
         }
 
         private static void Media_Ended(object sender, EventArgs e)
@@ -121,18 +138,26 @@ namespace FirstGame
             if (e.KeyCode == Keys.Up)
             {
                 controlUp = false;
+                if (controller)
+                    serialPort.WriteLine("0");
             }
             if (e.KeyCode == Keys.Down)
             {
                 controlDown = false;
+                if (controller)
+                    serialPort.WriteLine("2");
             }
             if (e.KeyCode == Keys.Left)
             {
                 controlLeft = false;
+                if (controller)
+                    serialPort.WriteLine("4");
             }
             if (e.KeyCode == Keys.Right)
             {
                 controlRight = false;
+                if (controller)
+                    serialPort.WriteLine("6");
             }
         }
 
@@ -201,21 +226,29 @@ namespace FirstGame
             if (e.KeyCode == Keys.Up)
             {
                 controlUp = true;
+                if (controller)
+                    serialPort.WriteLine("1");
                 //ship.Up();
             }
             if (e.KeyCode == Keys.Down)
             {
                 controlDown = true;
+                if (controller)
+                    serialPort.WriteLine("3");
                 //ship.Down();
             }
             if (e.KeyCode == Keys.Left)
             {
                 controlLeft = true;
+                if (controller)
+                    serialPort.WriteLine("5");
                 //ship.Left();
             }
             if (e.KeyCode == Keys.Right)
             {
                 controlRight = true;
+                if (controller)
+                    serialPort.WriteLine("7");
                 //ship.Down();
             }
         }
@@ -241,7 +274,7 @@ namespace FirstGame
             //Automatic firing rate
             shotTimer.Interval =1000;
             shotTimer.Start();
-            shotTimer.Tick += ShotTimer_Tick;
+            if(autoFire)shotTimer.Tick += ShotTimer_Tick;
 
             //Automatic boss firing rate
             bossShotTimer.Interval = 1000;
@@ -267,6 +300,41 @@ namespace FirstGame
 
         //Ship bullet exception handler
         private static void ShotTimer_Tick(object sender, EventArgs e)
+        {
+            if (startGame)
+            {               
+                ShotSound();
+                //Shot mechanic (Lvl - ship level and number of bullets according to the standard principle)
+                int numberOfBullets = ship.Lvl;
+
+                //Determining type of bullets
+                if (numberOfBullets > 6) numberOfBullets = 6;
+                bool superBullet = false;
+                if (numberOfBullets > 3)
+                {
+                    superBullet = true;
+                    numberOfBullets -= 3;
+                }
+
+                //Generating bullets according to ship lvl
+                for (int i = -numberOfBullets / 2; i <= numberOfBullets / 2; i++)
+                {
+                    //First type of bullets
+                    if (numberOfBullets % 2 == 0 && i == 0 && numberOfBullets != 0) { continue; }
+                    if (superBullet) bullets.Add(new Bullet(new Point(ship.Rect.X + 10, ship.Rect.Y + i * 8 + ship.Size / 2 - 1), new Point(4, 0), new Size(6, 2)));
+
+                    //Second type of bullets
+                    else bullets.Add(new Bullet(new Point(ship.Rect.X + 10, ship.Rect.Y + ship.Size / 2 - 1), new Point(4, i), new Size(4, 1)));
+
+                    //Data transfer to constructor
+                    bullets[index].Lvl = ship.Lvl;
+                    index++;
+                }
+                CountPlus();
+            }          
+        }
+
+        private static void ShotTimer_Tick()
         {
             if (startGame)
             {
@@ -298,7 +366,7 @@ namespace FirstGame
                     index++;
                 }
                 CountPlus();
-            }          
+            }
         }
 
         //Previous version of shooting
@@ -382,10 +450,9 @@ namespace FirstGame
             if (controlDown) ship.Down();
             if (controlLeft) ship.Left();
             if (controlRight) ship.Right();
-            //Примусова сборка мусора (наче допомогло)
+            //Примусова сборка мусора ()
             GC.Collect();
-            GC.WaitForPendingFinalizers();
-
+            GC.WaitForPendingFinalizers();           
             Drawing();
             Update();
         }
@@ -396,7 +463,88 @@ namespace FirstGame
             //Static (non-interacting objects)
             buffer.Graphics.Clear(Color.Black);
             BackGround();
+            //--------------------------------------------------
+            {
+                if (controller)
+                {
+                    serialPort.WriteLine(ship.Score.ToString());
+                    if (!autoFire)
+                    {
+                        string msg = serialPort.ReadExisting();
+                        if (msg == "09\r")  Shot(); 
+                    }
+                    string str = serialPort.ReadLine();
 
+                    void firstJoy()
+                    {
+                        if (str == "01\r")
+                        {
+                            ship.Up();
+                        }
+                        if (str == "02\r")
+                        {
+                            ship.Right();
+                        }
+                        if (str == "03\r")
+                        {
+                            ship.Down();
+                        }
+                        if (str == "04\r")
+                        {
+                            ship.Left();
+                        }
+                    }
+                    void secondJoy()
+                    {
+                        if (str == "09\r")
+                        {
+                            Shot();
+                        }
+                        if (str == "01\r")
+                        {
+                            ship.Up();
+                        }
+                        if (str == "02\r")
+                        {
+                            ship.Up();
+                            ship.Right();
+                        }
+                        if (str == "03\r")
+                        {
+                            ship.Right();
+                        }
+                        if (str == "04\r")
+                        {
+                            ship.Right();
+                            ship.Down();
+                        }
+                        if (str == "05\r")
+                        {
+                            ship.Down();
+                        }
+                        if (str == "06\r")
+                        {
+                            ship.Down();
+                            ship.Left();
+                        }
+                        if (str == "07\r")
+                        {
+                            ship.Left();
+                        }
+                        if (str == "08\r")
+                        {
+                            ship.Up();
+                            ship.Left();
+                        }
+                    }
+                    //firstJoy();
+                    secondJoy();
+
+                }
+            }
+            
+            
+            //--------------------------------------------------
             //Dynamic
             foreach (Rocket obj in images)
             {
@@ -453,172 +601,187 @@ namespace FirstGame
             for (int i = 0; i < asteroids.Count; i++)
             {
                 asteroids[i].Update();
-                if(startGame)
-                //Collision of object and bullet 
-                for (int j = 0; j < bullets.Count; j++)
+                if (startGame)
                 {
-                    if (bullets[j].Collision(asteroids[i]))
+                    //Collision of object and bullet 
+                    for (int j = 0; j < bullets.Count; j++)
                     {
-                        HitSound();
-                        asteroids[i].PowerLow(bullets[j].Power);    //Object "power" reduction
-
-                        if (asteroids[i].Power <= 0)    //Procedure or destroyingobject (if power less then zero)
+                        if (bullets[j].Collision(asteroids[i]))
                         {
-                            VisualEffect(2, asteroids[i].PosX + asteroids[i].Size / 2, asteroids[i].PosY + asteroids[i].Size / 2);  //Spawn in place of the object"visual effects"
-                            //Spawn on the asteroid site asteroid charges
-                            int n = 1;
-                            for(int ich = -n; ich <= n; ich++)
+                            if (controller)
+                                serialPort.WriteLine("B");
+                            HitSound();
+                            asteroids[i].PowerLow(bullets[j].Power);    //Object "power" reduction
+
+                            if (asteroids[i].Power <= 0)    //Procedure or destroyingobject (if power less then zero)
                             {
-                                for (int jch = -n ; jch <= n; jch++)
+                                VisualEffect(2, asteroids[i].PosX + asteroids[i].Size / 2, asteroids[i].PosY + asteroids[i].Size / 2);  //Spawn in place of the object"visual effects"
+                                                                                                                                        //Spawn on the asteroid site asteroid charges
+                                int n = 1;
+                                for (int ich = -n; ich <= n; ich++)
                                 {
-                                    if (ich == 0 && jch == 0) { continue; }
-                                    if (ich == 0 || jch == 0) { continue; }
+                                    for (int jch = -n; jch <= n; jch++)
+                                    {
+                                        if (ich == 0 && jch == 0) { continue; }
+                                        if (ich == 0 || jch == 0) { continue; }
                                         charges.Add(new AsteroidCharge(
                                         new Point(asteroids[i].PosX + asteroids[i].Size / 2, asteroids[i].PosY + asteroids[i].Size / 2),
-                                        new Point(3*ich,3*jch), new Size(asteroids[i].Size / 4, asteroids[i].Size / 4)));
+                                        new Point(3 * ich, 3 * jch), new Size(asteroids[i].Size / 4, asteroids[i].Size / 4)));
+                                    }
                                 }
+
+                                //Scoring points for destroyed object and the approach of the boss spawn, if the boss flag is false
+                                ship.ScoreUp(asteroids[i].Size);
+                                if (!bossFight) ship.BossTimeUp(asteroids[i].Size);
+
+                                //Remove an object from the collection and load new objects if the boss flag is false
+                                asteroids.RemoveAt(i);
+                                if (asteroids.Count < initialNumberOfAsteroids && !bossFight)
+                                {
+                                    LoadAsteroids(1);
+                                }
+                                else
+                                {
+                                    /*Console.WriteLine(asteroids.Count);
+                                    Console.WriteLine(!bossFight);
+                                    Console.WriteLine(initialNumberOfAsteroids);*/
+                                }
+                                if (i != 0) i--;
+                                else break;
                             }
 
-                            //Scoring points for destroyed object and the approach of the boss spawn, if the boss flag is false
-                            ship.ScoreUp(asteroids[i].Size);    
-                            if (!bossFight) ship.BossTimeUp(asteroids[i].Size);
-
-                            //Remove an object from the collection and load new objects if the boss flag is false
-                            asteroids.RemoveAt(i);
-                            if (asteroids.Count < initialNumberOfAsteroids && !bossFight)
-                            {
-                                LoadAsteroids(1);
-                            }
-                            else
-                            {
-                                /*Console.WriteLine(asteroids.Count);
-                                Console.WriteLine(!bossFight);
-                                Console.WriteLine(initialNumberOfAsteroids);*/
-                            }
-                            if (i != 0) i--;
-                            else break;
+                            //The procedure for destroying bullets that hit the object
+                            bullets.RemoveAt(j);
+                            j--; index--;
                         }
-
-                        //The procedure for destroying bullets that hit the object
-                        bullets.RemoveAt(j);
-                        j--; index--;
                     }
-
                     //Collision of object and ship
-                    if (ship.Collision(asteroids[i]))
+                    if (asteroids.Count > 0 && ship.Collision(asteroids[i]))
                     {
+                        if (controller)
+                            serialPort.WriteLine("A");
                         HitSound();
                         VisualEffect(2, asteroids[i].PosX + asteroids[i].Size / 2, asteroids[i].PosY + asteroids[i].Size / 2);  //Spawn in place of the object"visual effects"
-                        //Changing the characteristics of the ship
-                        ship.EnergyLow(15);
+                                                                                                                                //Changing the characteristics of the ship
+                        ship.EnergyLow(asteroids[i].Damage);
                         ship.LvlUp(-1);
                         if (ship.Energy <= 0) ship.Die();
                         ship.ScoreUp(asteroids[i].Size);
                         if (!bossFight) ship.BossTimeUp(asteroids[i].Size);
 
                         //A similar procedure destroying object
-                        asteroids.RemoveAt(i);                       
+                        asteroids.RemoveAt(i);
                         if (asteroids.Count < initialNumberOfAsteroids && !bossFight)
                         {
                             LoadAsteroids(1);
                         }
-                        if (i != 0) i--;
+                        if (i > 1) i--;
                         else break;
                     }
-                }
+                }                
             }
 
             //Asteroids charges
             for (int i = 0; i < charges.Count; i++)
             {
                 charges[i].Update();
-                if(startGame)
-                //Collision of object and bullet  
-                for (int j = 0; j < bullets.Count; j++)
+                if (startGame)
                 {
-                    if (bullets[j].Collision(charges[i]))
+                    //Collision of object and bullet  
+                    for (int j = 0; j < bullets.Count; j++)
                     {
-                        HitSound();
-                        charges[i].PowerLow(bullets[j].Power);  //Object "power" reduction
-                        if (charges[i].Power <= 0) //Procedure or destroyingobject (if power less then zero)
+                        if (bullets[j].Collision(charges[i]))
                         {
-                            VisualEffect(2, charges[i].PosX + charges[i].Size / 2, charges[i].PosY + charges[i].Size / 2); //Spawn in place of the object"visual effects"
-                            if (!bossFight)
+                            if (controller)
+                                serialPort.WriteLine("B");
+                            HitSound();
+                            charges[i].PowerLow(bullets[j].Power);  //Object "power" reduction
+                            if (charges[i].Power <= 0) //Procedure or destroyingobject (if power less then zero)
                             {
-                                ship.ScoreUp(charges[i].Size);
-                                ship.BossTimeUp(charges[i].Size);
+                                VisualEffect(2, charges[i].PosX + charges[i].Size / 2, charges[i].PosY + charges[i].Size / 2); //Spawn in place of the object"visual effects"
+                                if (!bossFight)
+                                {
+                                    ship.ScoreUp(charges[i].Size);
+                                    ship.BossTimeUp(charges[i].Size);
+                                }
+                                charges.RemoveAt(i);
+                                if (i != 0) i--;
+                                else break;
                             }
-                            charges.RemoveAt(i);
-                            if (i != 0) i--;
-                            else break;
+                            bullets.RemoveAt(j);
+                            j--; index--;
                         }
-                        bullets.RemoveAt(j);
-                        j--; index--;
                     }
-
                     //Collision of object and ship
                     if (ship.Collision(charges[i]))
                     {
+                        if (controller)
+                            serialPort.WriteLine("A");
                         HitSound();
                         VisualEffect(2, charges[i].PosX + charges[i].Size / 2, charges[i].PosY + charges[i].Size / 2);
-                        ship.EnergyLow(5);
+                        ship.EnergyLow(charges[i].Damage);
                         if (ship.Energy <= 0) ship.Die();
                         ship.ScoreUp(0);
                         if (!bossFight) ship.BossTimeUp(charges[i].Size);
-                        charges.RemoveAt(i);                        
-                        if (i != 0) i--;
+                        charges.RemoveAt(i);
+                        if (i > 1) i--;
                         else break;
                     }
-                }
+                }              
             }
             //Stars
             for (int i = 0; i < stars.Count; i++)
             {
                 stars[i].Update();
-                if(startGame)
-                //Collision of object and bullet  
-                for (int j = 0; j < bullets.Count; j++)
+                if (startGame)
                 {
-                    if (bullets[j].Collision(stars[i]))
+                    //Collision of object and bullet  
+                    for (int j = 0; j < bullets.Count; j++)
                     {
-                        HitSound();
-                        stars[i].PowerLow(bullets[j].Power);    //Object "power" reduction
-                        if (stars[i].Power <= 0)    //Procedure or destroyingobject (if power less then zero)
+                        if (bullets[j].Collision(stars[i]))
                         {
-                            VisualEffect(2, stars[i].PosX + stars[i].Size / 2, stars[i].PosY + stars[i].Size / 2); //Spawn in place of the object"visual effects"
-                            ship.ScoreUp(stars[i].Size);
-                            if (!bossFight) ship.BossTimeUp(stars[i].Size);
-                            stars.RemoveAt(i);
+                            if (controller)
+                                serialPort.WriteLine("B");
+                            HitSound();
+                            stars[i].PowerLow(bullets[j].Power);    //Object "power" reduction
+                            if (stars[i].Power <= 0)    //Procedure or destroyingobject (if power less then zero)
+                            {
+                                VisualEffect(2, stars[i].PosX + stars[i].Size / 2, stars[i].PosY + stars[i].Size / 2); //Spawn in place of the object"visual effects"
+                                ship.ScoreUp(stars[i].Size);
+                                if (!bossFight) ship.BossTimeUp(stars[i].Size);
+                                stars.RemoveAt(i);
+                                if (i != 0) i--;
+                            }
+                            bullets.RemoveAt(j);
+                            j--; index--;
+                            if (stars.Count == 0 && !bossFight)
+                            {
+                                LoadStars();
+                            }
                             if (i != 0) i--;
+                            else break;
                         }
-                        bullets.RemoveAt(j);
-                        j--; index--;
-                        if (stars.Count == 0 && !bossFight)
-                        {
-                            LoadStars();
-                        }
-                        if (i != 0) i--;
-                        else break;
                     }
-
                     //Collision of object and ship 
-                    if (ship.Collision(stars[i]))
+                    if (stars.Count > 0 && ship.Collision(stars[i]))
                     {
+                        if (controller)
+                            serialPort.WriteLine("A");
                         HitSound();
                         VisualEffect(2, stars[i].PosX + stars[i].Size / 2, stars[i].PosY + stars[i].Size / 2); //Spawn in place of the object"visual effects"
-                        ship.EnergyLow(10);
+                        ship.EnergyLow(stars[i].Damage);
                         if (ship.Energy <= 0) ship.Die();
                         ship.ScoreUp(stars[i].Size);
                         if (!bossFight) ship.BossTimeUp(stars[i].Size);
-                        stars.RemoveAt(i);                       
+                        stars.RemoveAt(i);
                         if (stars.Count == 0 && !bossFight)
                         {
                             LoadStars();
                         }
-                        if (i != 0) i--;
+                        if (i > 1) i--;
                         else break;
-                        if (stars.Count == 0 && !bossFight) LoadStars();
-                    } 
+                        if (images.Count == 0 && !bossFight) LoadImages();
+                    }
                 }
             }
 
@@ -626,49 +789,50 @@ namespace FirstGame
             for (int i = 0; i < images.Count; i++)
             {
                 images[i].Update();
-                if(startGame)
-                //Collision of object and bullet
-                for (int j = 0; j < bullets.Count; j++)
+                if (startGame)
                 {
-                    if (bullets[j].Collision(images[i]))
+                    //Collision of object and bullet
+                    for (int j = 0; j < bullets.Count; j++)
                     {
-                        HitSound();
-                        images[i].PowerLow(bullets[j].Power);   //Object "power" reduction
-                        if (images[i].Power <= 0)   //Procedure or destroyingobject (if power less then zero)
+                        if (bullets[j].Collision(images[i]))
                         {
-                            VisualEffect(2, images[i].PosX +images[i].Size / 2, images[i].PosY + images[i].Size / 2); //Spawn in place of the object"visual effects"
-                            ship.ScoreUp(images[i].Size);
-                            if (!bossFight) ship.BossTimeUp(images[i].Size);
-                            images.RemoveAt(i);
+                            if (controller)
+                                serialPort.WriteLine("B");
+                            HitSound();
+                            images[i].PowerLow(bullets[j].Power);   //Object "power" reduction
+                            if (images[i].Power <= 0)   //Procedure or destroyingobject (if power less then zero)
+                            {
+                                VisualEffect(2, images[i].PosX + images[i].Size / 2, images[i].PosY + images[i].Size / 2); //Spawn in place of the object"visual effects"
+                                ship.ScoreUp(images[i].Size);
+                                if (!bossFight) ship.BossTimeUp(images[i].Size);
+                                images.RemoveAt(i);
+                                if (i != 0) i--;
+                            }
+                            bullets.RemoveAt(j);
+                            j--; index--;
+                            if (images.Count == 0 && !bossFight)
+                            {
+                                LoadImages();
+                            }
                             if (i != 0) i--;
+                            else break;
                         }
-                        bullets.RemoveAt(j);
-                        j--; index--;
-                        if (images.Count == 0 && !bossFight)
-                        {
-                            LoadImages();
-                        }
-                        if (i != 0) i--;
-                        else break;
                     }
-
                     //Collision of object and ship
-                    if (ship.Collision(images[i]))
+                    if (images.Count >0 && ship.Collision(images[i]))
                     {
+                        if (controller)
+                            serialPort.WriteLine("A");
                         HitSound();
                         VisualEffect(2, images[i].PosX + images[i].Size / 2, images[i].PosY + images[i].Size / 2); //Spawn in place of the object"visual effects"
-                        ship.EnergyLow(10);
+                        ship.EnergyLow(images[i].Damage);
                         if (ship.Energy <= 0) ship.Die();
                         ship.ScoreUp(images[i].Size);
                         if (!bossFight) ship.BossTimeUp(images[i].Size);
                         images.RemoveAt(i);
                         if (ship.Energy <= 0) ship.Die();
-                        if (images.Count == 0 && !bossFight)
-                        {
-                            LoadImages();
-                        }
-                        if (i != 0) i--;
-                        else break;                        
+                        if (i > 1) i--;
+                        else break;
                         if (images.Count == 0 && !bossFight) LoadImages();
                     }
                 }
@@ -682,12 +846,14 @@ namespace FirstGame
                 //Collision of object and ship
                 if (ship.Collision(bonus[i]))
                 {
+                        if (controller)
+                            serialPort.WriteLine("C");
                     ship.LvlUp(1);//Lvl+
                     ship.ScoreUp(30);
                     if (!bossFight) ship.BossTimeUp(30);
                     bonus.RemoveAt(i);
                     i--;
-                    if (ship.Lvl > 6) { ship.EnergyLow(-100); }//increase HP if the level is greater than the specified
+                    if (ship.Lvl > 6) { ship.EnergyLow(-50); ship.Lvl--; }//increase HP if the level is greater than the specified
                     BonusSound();
                 }
             }
@@ -698,15 +864,19 @@ namespace FirstGame
                 if(startGame)
                 if (bossFight)
                 {
-                    boss[i].Update();;
+                    boss[i].Update();
                 }     
                 for (int j = 0; j < bullets.Count; j++)
                 {
                     //Collision of object and bullet
                     if (bullets[j].Collision(boss[i]))
                     {
+                        if (controller)
+                            serialPort.WriteLine("B");
                         HitSound();
                         boss[i].PowerLow(bullets[j].Power); //Object "power" reduction
+                        bullets.RemoveAt(j);
+                        j--; index--;
                         //Spawn in boss place charges
                         int n = 1;
                         for (int ich = -n; ich <= n; ich++)
@@ -723,6 +893,8 @@ namespace FirstGame
                         //Boss destoring procedure
                         if (boss[i].Power <= 0)
                         {
+                            if (controller)
+                                serialPort.WriteLine("C");
                             BonusSound();
                             ship.LvlUp(1);
                             bossFight = false;
@@ -737,15 +909,15 @@ namespace FirstGame
                             if (i != 0) i--;
                             else break;
                         }
-                        bullets.RemoveAt(j);
-                        j--; index--;
-                    }
-                    //End the game if ship collides with boss
-                    if (ship.Collision(boss[i]))
-                    {
-                        ship.Energy = 0;
-                        if (ship.Energy <= 0) ship.Die();
-                    }
+                    }                   
+                }
+                //End the game if ship collides with boss
+                if (boss.Count > 0 && ship.Collision(boss[i]))
+                {
+                    if (controller)
+                        serialPort.WriteLine("A");
+                    ship.Energy = 0;
+                    if (ship.Energy <= 0) ship.Die();
                 }
             }
 
@@ -764,8 +936,10 @@ namespace FirstGame
                 //Collision of object and ship
                 if (ship.Collision(enemyBullets[i]))
                 {
+                    if (controller)
+                        serialPort.WriteLine("A");
                     HitSound();
-                    ship.EnergyLow(5);
+                    ship.EnergyLow(enemyBullets[i].Damage);
                     VisualEffect(2, enemyBullets[i].PosX + enemyBullets[i].Size / 2, enemyBullets[i].PosY + enemyBullets[i].Size / 2); //Spawn in place of the object of "visual effects
                     if (ship.Energy <= 0) ship.Die();
                     enemyBullets.RemoveAt(i);
@@ -920,6 +1094,14 @@ namespace FirstGame
             gameOverSound.Open(new System.Uri("Content\\Sounds\\GameOver.mp3", UriKind.Relative));
             gameOverSound.Volume = 0.1;
             gameOverSound.Play();
+            if (controller)
+            {
+                serialPort.WriteLine("0");
+                serialPort.WriteLine("2");
+                serialPort.WriteLine("4");
+                serialPort.WriteLine("6");
+                serialPort.WriteLine("A");
+            }
 
             //Display information
             buffer.Graphics.DrawString(

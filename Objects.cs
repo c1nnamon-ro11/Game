@@ -7,7 +7,7 @@ namespace FirstGame
 {
     delegate void Message();
     //Interface collision
-    interface ICollision
+    public interface ICollision
     {
         bool Collision(ICollision obj);
         Rectangle Rect { get; }
@@ -17,13 +17,14 @@ namespace FirstGame
 
     //Base object
     //=================================================================================================================
-    abstract class BaseObject:ICollision
+    public abstract class BaseObject:ICollision
     {
         //Protected fields 
         protected Point pos; //Coor of object
         protected Point dir; //"speed" of object
         protected Size size; //object size
-        protected int power; //objecr "power"
+        protected int power; //object "power"
+        protected int damage; //objetr "damage"
 
         //Constructor
         public BaseObject(Point pos, Point dir, Size size)
@@ -53,6 +54,11 @@ namespace FirstGame
             get { return power; }
             set { power = value; }
         }
+        public virtual int Damage
+        {
+            get { return damage; }
+            set { damage = value; }
+        }
         //Methods
         public void PowerLow(int n)
         {
@@ -77,7 +83,7 @@ namespace FirstGame
 
     //Star
     //=================================================================================================================
-    class Star : BaseObject
+    public class Star : BaseObject
     {
         //Image at screen
         Image img = Image.FromFile("Content\\pictures\\star.png");
@@ -86,6 +92,7 @@ namespace FirstGame
         public Star(Point pos, Point dir, Size size) : base(pos, dir, size)
         {
             Power = 10;
+            Damage = 10;
         }
 
         //Drawing at game screen
@@ -122,6 +129,7 @@ namespace FirstGame
         public Rocket(Point pos,Point dir, Size size):base(pos,dir,size)
         {
             Power = 5;
+            Damage = 10;
         }
 
         //Drawing at game screen
@@ -154,6 +162,7 @@ namespace FirstGame
         public Asteroid(Point pos,Point dir,Size size):base(pos,dir,size)
         {
             Power = 50;
+            Damage = 15;
         }
 
         //Drawing at game screen
@@ -188,6 +197,7 @@ namespace FirstGame
         public AsteroidCharge(Point pos, Point dir, Size size) : base(pos, dir, size)
         {
             Power = 5;
+            Damage = 5;
         }
 
         //Drawing at game screen
@@ -286,7 +296,7 @@ namespace FirstGame
         }
         public void Down()
         {
-            if (pos.Y < GameFunctional.Height) pos.Y = pos.Y + dir.Y;
+            if (pos.Y + 80 < GameFunctional.Height) pos.Y = pos.Y + dir.Y;
         }
         public void Left()
         {
@@ -294,7 +304,7 @@ namespace FirstGame
         }
         public void Right()
         {
-            if (pos.X < GameFunctional.Width) pos.X = pos.X + dir.X;
+            if (pos.X+50 < GameFunctional.Width) pos.X = pos.X + dir.X;
         }
 
         //Death
@@ -407,6 +417,7 @@ namespace FirstGame
         public EnemyBullets(Point pos, Point dir, Size size) : base(pos, dir, size)
         {
             Power = 10;
+            Damage = 5;
         }
 
         //Drawing at game screen
