@@ -455,8 +455,7 @@ namespace FirstGame
             GC.WaitForPendingFinalizers();           
             Drawing();
             Update();
-        }
-
+        }       
         //Display all objects
         static public void Drawing()
         {
@@ -470,76 +469,108 @@ namespace FirstGame
                     serialPort.WriteLine(ship.Score.ToString());
                     if (!autoFire)
                     {
-                        string msg = serialPort.ReadExisting();
-                        if (msg == "09\r")  Shot(); 
-                    }
-                    string str = serialPort.ReadLine();
+                        //string msg = serialPort.ReadExisting();
+                        //if (msg == "09\r")  Shot(); 
+                    }                   
+                    string str="";
+                    message();
+                    async void message()
+                    {
+                        var data = await serialPort.ReadAsync(25);
+                        string strBuf = System.Text.Encoding.ASCII.GetString(data);
+                        strBuf = strBuf.Replace("\r", "");                        
+                        strBuf = strBuf.Replace("\n", "");
+                        str = strBuf.Substring(0, strBuf.Length/2);
+                        char[] strToChar = str.ToCharArray();
+                        int count = 0;
+                        char answ =' ';
+                        for (int i = 0; i < strToChar.Length; i++)
+                        {
+                            char current = strToChar[i];
+                            int currentCount=0;
+                            for(int j = 0; j < strToChar.Length; j++)
+                            {
+                                if (strToChar[i] == strToChar[j])
+                                {
+                                    currentCount++;
+                                }
+                            }
+                            if(count<currentCount)
+                            {
+                                count = currentCount;
+                                answ = current;
+                            }
+                        }
+                        str = answ.ToString();
+                        secondJoy();
+                        
+                        //str = data.ToString();
 
+                    }
                     void firstJoy()
                     {
-                        if (str == "01\r")
+                        if (str == "01")
                         {
                             ship.Up();
                         }
-                        if (str == "02\r")
+                        if (str == "02")
                         {
                             ship.Right();
                         }
-                        if (str == "03\r")
+                        if (str == "03")
                         {
                             ship.Down();
                         }
-                        if (str == "04\r")
+                        if (str == "04")
                         {
                             ship.Left();
                         }
                     }
                     void secondJoy()
                     {
-                        if (str == "09\r")
+                        if (str == "9")
                         {
                             Shot();
                         }
-                        if (str == "01\r")
+                        if (str == "1")
                         {
                             ship.Up();
                         }
-                        if (str == "02\r")
+                        if (str == "2")
                         {
                             ship.Up();
                             ship.Right();
                         }
-                        if (str == "03\r")
+                        if (str == "3")
                         {
                             ship.Right();
                         }
-                        if (str == "04\r")
+                        if (str == "4")
                         {
                             ship.Right();
                             ship.Down();
                         }
-                        if (str == "05\r")
+                        if (str == "5")
                         {
                             ship.Down();
                         }
-                        if (str == "06\r")
+                        if (str == "6")
                         {
                             ship.Down();
                             ship.Left();
                         }
-                        if (str == "07\r")
+                        if (str == "7")
                         {
                             ship.Left();
                         }
-                        if (str == "08\r")
+                        if (str == "8")
                         {
                             ship.Up();
                             ship.Left();
                         }
                     }
                     //firstJoy();
-                    secondJoy();
-
+                    //secondJoy();
                 }
             }
             

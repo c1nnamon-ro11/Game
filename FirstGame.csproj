@@ -62,6 +62,7 @@
     <Compile Include="ScoreMenu.cs">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="SerialPortExtentions.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
