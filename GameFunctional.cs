@@ -138,26 +138,18 @@ namespace FirstGame
             if (e.KeyCode == Keys.Up)
             {
                 controlUp = false;
-                if (controller)
-                    serialPort.WriteLine("0");
             }
             if (e.KeyCode == Keys.Down)
             {
                 controlDown = false;
-                if (controller)
-                    serialPort.WriteLine("2");
             }
             if (e.KeyCode == Keys.Left)
             {
                 controlLeft = false;
-                if (controller)
-                    serialPort.WriteLine("4");
             }
             if (e.KeyCode == Keys.Right)
             {
                 controlRight = false;
-                if (controller)
-                    serialPort.WriteLine("6");
             }
         }
 
@@ -226,29 +218,21 @@ namespace FirstGame
             if (e.KeyCode == Keys.Up)
             {
                 controlUp = true;
-                if (controller)
-                    serialPort.WriteLine("1");
                 //ship.Up();
             }
             if (e.KeyCode == Keys.Down)
             {
                 controlDown = true;
-                if (controller)
-                    serialPort.WriteLine("3");
                 //ship.Down();
             }
             if (e.KeyCode == Keys.Left)
             {
                 controlLeft = true;
-                if (controller)
-                    serialPort.WriteLine("5");
                 //ship.Left();
             }
             if (e.KeyCode == Keys.Right)
             {
                 controlRight = true;
-                if (controller)
-                    serialPort.WriteLine("7");
                 //ship.Down();
             }
         }
@@ -468,76 +452,52 @@ namespace FirstGame
                 if (controller)
                 {
                     serialPort.WriteLine(ship.Score.ToString());
-                    if (!autoFire)
-                    {
-                        string msg = serialPort.ReadExisting();
-                        if (msg == "09\r")  Shot(); 
-                    }
+
                     string str = serialPort.ReadLine();
 
-                    void firstJoy()
-                    {
-                        if (str == "01\r")
-                        {
-                            ship.Up();
-                        }
-                        if (str == "02\r")
-                        {
-                            ship.Right();
-                        }
-                        if (str == "03\r")
-                        {
-                            ship.Down();
-                        }
-                        if (str == "04\r")
-                        {
-                            ship.Left();
-                        }
-                    }
                     void secondJoy()
                     {
-                        if (str == "09\r")
+                        if (str == "9\r")
                         {
                             Shot();
                         }
-                        if (str == "01\r")
+                        if (str == "1\r")
                         {
                             ship.Up();
                         }
-                        if (str == "02\r")
+                        if (str == "2\r")
                         {
                             ship.Up();
                             ship.Right();
                         }
-                        if (str == "03\r")
+                        if (str == "3\r")
                         {
                             ship.Right();
                         }
-                        if (str == "04\r")
+                        if (str == "4\r")
                         {
                             ship.Right();
                             ship.Down();
                         }
-                        if (str == "05\r")
+                        if (str == "5\r")
                         {
                             ship.Down();
                         }
-                        if (str == "06\r")
+                        if (str == "6\r")
                         {
                             ship.Down();
                             ship.Left();
                         }
-                        if (str == "07\r")
+                        if (str == "7\r")
                         {
                             ship.Left();
                         }
-                        if (str == "08\r")
+                        if (str == "8\r")
                         {
                             ship.Up();
                             ship.Left();
                         }
                     }
-                    //firstJoy();
                     secondJoy();
 
                 }
@@ -608,8 +568,6 @@ namespace FirstGame
                     {
                         if (bullets[j].Collision(asteroids[i]))
                         {
-                            if (controller)
-                                serialPort.WriteLine("B");
                             HitSound();
                             asteroids[i].PowerLow(bullets[j].Power);    //Object "power" reduction
 
@@ -658,8 +616,6 @@ namespace FirstGame
                     //Collision of object and ship
                     if (asteroids.Count > 0 && ship.Collision(asteroids[i]))
                     {
-                        if (controller)
-                            serialPort.WriteLine("A");
                         HitSound();
                         VisualEffect(2, asteroids[i].PosX + asteroids[i].Size / 2, asteroids[i].PosY + asteroids[i].Size / 2);  //Spawn in place of the object"visual effects"
                                                                                                                                 //Changing the characteristics of the ship
@@ -692,8 +648,6 @@ namespace FirstGame
                     {
                         if (bullets[j].Collision(charges[i]))
                         {
-                            if (controller)
-                                serialPort.WriteLine("B");
                             HitSound();
                             charges[i].PowerLow(bullets[j].Power);  //Object "power" reduction
                             if (charges[i].Power <= 0) //Procedure or destroyingobject (if power less then zero)
@@ -715,8 +669,6 @@ namespace FirstGame
                     //Collision of object and ship
                     if (ship.Collision(charges[i]))
                     {
-                        if (controller)
-                            serialPort.WriteLine("A");
                         HitSound();
                         VisualEffect(2, charges[i].PosX + charges[i].Size / 2, charges[i].PosY + charges[i].Size / 2);
                         ship.EnergyLow(charges[i].Damage);
@@ -740,8 +692,6 @@ namespace FirstGame
                     {
                         if (bullets[j].Collision(stars[i]))
                         {
-                            if (controller)
-                                serialPort.WriteLine("B");
                             HitSound();
                             stars[i].PowerLow(bullets[j].Power);    //Object "power" reduction
                             if (stars[i].Power <= 0)    //Procedure or destroyingobject (if power less then zero)
@@ -765,8 +715,6 @@ namespace FirstGame
                     //Collision of object and ship 
                     if (stars.Count > 0 && ship.Collision(stars[i]))
                     {
-                        if (controller)
-                            serialPort.WriteLine("A");
                         HitSound();
                         VisualEffect(2, stars[i].PosX + stars[i].Size / 2, stars[i].PosY + stars[i].Size / 2); //Spawn in place of the object"visual effects"
                         ship.EnergyLow(stars[i].Damage);
@@ -796,8 +744,6 @@ namespace FirstGame
                     {
                         if (bullets[j].Collision(images[i]))
                         {
-                            if (controller)
-                                serialPort.WriteLine("B");
                             HitSound();
                             images[i].PowerLow(bullets[j].Power);   //Object "power" reduction
                             if (images[i].Power <= 0)   //Procedure or destroyingobject (if power less then zero)
@@ -821,8 +767,6 @@ namespace FirstGame
                     //Collision of object and ship
                     if (images.Count >0 && ship.Collision(images[i]))
                     {
-                        if (controller)
-                            serialPort.WriteLine("A");
                         HitSound();
                         VisualEffect(2, images[i].PosX + images[i].Size / 2, images[i].PosY + images[i].Size / 2); //Spawn in place of the object"visual effects"
                         ship.EnergyLow(images[i].Damage);
@@ -846,8 +790,6 @@ namespace FirstGame
                 //Collision of object and ship
                 if (ship.Collision(bonus[i]))
                 {
-                        if (controller)
-                            serialPort.WriteLine("C");
                     ship.LvlUp(1);//Lvl+
                     ship.ScoreUp(30);
                     if (!bossFight) ship.BossTimeUp(30);
@@ -871,8 +813,6 @@ namespace FirstGame
                     //Collision of object and bullet
                     if (bullets[j].Collision(boss[i]))
                     {
-                        if (controller)
-                            serialPort.WriteLine("B");
                         HitSound();
                         boss[i].PowerLow(bullets[j].Power); //Object "power" reduction
                         bullets.RemoveAt(j);
@@ -893,8 +833,6 @@ namespace FirstGame
                         //Boss destoring procedure
                         if (boss[i].Power <= 0)
                         {
-                            if (controller)
-                                serialPort.WriteLine("C");
                             BonusSound();
                             ship.LvlUp(1);
                             bossFight = false;
@@ -914,8 +852,6 @@ namespace FirstGame
                 //End the game if ship collides with boss
                 if (boss.Count > 0 && ship.Collision(boss[i]))
                 {
-                    if (controller)
-                        serialPort.WriteLine("A");
                     ship.Energy = 0;
                     if (ship.Energy <= 0) ship.Die();
                 }
@@ -936,8 +872,6 @@ namespace FirstGame
                 //Collision of object and ship
                 if (ship.Collision(enemyBullets[i]))
                 {
-                    if (controller)
-                        serialPort.WriteLine("A");
                     HitSound();
                     ship.EnergyLow(enemyBullets[i].Damage);
                     VisualEffect(2, enemyBullets[i].PosX + enemyBullets[i].Size / 2, enemyBullets[i].PosY + enemyBullets[i].Size / 2); //Spawn in place of the object of "visual effects
@@ -1094,14 +1028,6 @@ namespace FirstGame
             gameOverSound.Open(new System.Uri("Content\\Sounds\\GameOver.mp3", UriKind.Relative));
             gameOverSound.Volume = 0.1;
             gameOverSound.Play();
-            if (controller)
-            {
-                serialPort.WriteLine("0");
-                serialPort.WriteLine("2");
-                serialPort.WriteLine("4");
-                serialPort.WriteLine("6");
-                serialPort.WriteLine("A");
-            }
 
             //Display information
             buffer.Graphics.DrawString(
