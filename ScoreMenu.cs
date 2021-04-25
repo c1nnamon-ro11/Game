@@ -1,11 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
 using System.IO;
+using System.Linq;
+using System.Drawing;
+using System.Windows.Forms;
+using System.Collections.Generic;
+
 
 namespace FirstGame
 {
@@ -59,7 +58,6 @@ namespace FirstGame
             btn_OK.Click += Btn_OK_Click;
         }
 
-
         private void ScoreBoard()
         {
             int i = 1;
@@ -82,7 +80,6 @@ namespace FirstGame
             }
             sw.Close();
         }
-
 
         private Dictionary<string,int> ScoreSort(List<string> users)
         {
