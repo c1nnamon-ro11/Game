@@ -62,7 +62,7 @@
     <Compile Include="GameObjects\Bullet.cs" />
     <Compile Include="GameObjects\EnemyBullets.cs" />
     <Compile Include="MusicEffects.cs" />
-    <Compile Include="GameObjects\Objects.cs" />
+    <Compile Include="GameObjects\BaseObject.cs" />
     <Compile Include="GameFunctional.cs" />
     <Compile Include="Game.cs">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>

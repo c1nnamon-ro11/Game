@@ -22,7 +22,11 @@ namespace FirstGame
         //Constructor
         public ScoreMenu(int width,int heigth,int _score)
         {
+            this.Size = new Size(width, heigth);
             this.Score = _score;
+            this.StartPosition = FormStartPosition.CenterParent;
+            this.Text = "Asteroid Belt";
+
             lblName = new Label();
             lblScore = new Label();
             lblUserScore = new Label();
@@ -58,6 +62,7 @@ namespace FirstGame
             btn_OK.Click += Btn_OK_Click;
         }
 
+        //"Rewriting" sroreboard
         private void ScoreBoard()
         {
             int i = 1;
@@ -81,6 +86,7 @@ namespace FirstGame
             sw.Close();
         }
 
+        //Sorting records
         private Dictionary<string,int> ScoreSort(List<string> users)
         {
             Dictionary<string, int> result = new Dictionary<string, int>();
@@ -103,6 +109,11 @@ namespace FirstGame
             return result;
         }
 
+        //
+        public void callFinishMenu()
+        {
+
+        }
         //Exit
         private void Btn_OK_Click(object sender, EventArgs e)
         {
