@@ -68,6 +68,8 @@ namespace FirstGame
 
         abstract public void Update();
 
+        //abstract public void Interaction();
+
         public bool Collision(ICollision o)
         {
             if (o.Rect.IntersectsWith(this.Rect)) return true; else return false;

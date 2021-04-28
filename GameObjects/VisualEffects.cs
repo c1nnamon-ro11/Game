@@ -2,7 +2,7 @@
 
 namespace FirstGame
 {
-    class VisualEffect : BaseObject
+    public class VisualEffect : BaseObject
     {
         //Constructor
         public VisualEffect(Point pos, Point dir, Size size) : base(pos, dir, size)

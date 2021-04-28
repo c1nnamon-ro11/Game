@@ -2,7 +2,7 @@
 
 namespace FirstGame
 {
-    class Bullet : Ship
+    public class Bullet : Ship
     {
         //Images at screen
         Image defaultBullet = Image.FromFile("Content\\pictures\\bullet1.png");
