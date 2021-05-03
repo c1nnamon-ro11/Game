@@ -75,7 +75,6 @@
     <Compile Include="GameObjects\Ship.cs" />
     <Compile Include="GameObjects\Star.cs" />
     <Compile Include="GameObjects\VisualEffects.cs" />
-    <Compile Include="ObjectLoader.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
