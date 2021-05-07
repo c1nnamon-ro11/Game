@@ -9,12 +9,32 @@ namespace FirstGame
         public static List<EnemyBullets> enemyBullets = new List<EnemyBullets>();
         private static Random rnd = new Random();
         //Image at screen
-        Image img = Image.FromFile("Content\\pictures\\fireball2.png");
-        //Constructor
+        static Image img = Image.FromFile("Content\\pictures\\fireball2.png");
+        const int DEFAULT_POWER = 100;
+        const int DEFAULT_DAMAGE = 15;
+        readonly int DEFAULT_WIDTH = img.Width;
+        readonly int DEFAULT_HEIGHT = img.Height;
+
+        public EnemyBullets(Point pos, Point dir) : base(pos, dir)
+        {
+            power = DEFAULT_POWER;
+            damage = DEFAULT_DAMAGE;
+            size = new Size(DEFAULT_WIDTH, DEFAULT_HEIGHT);
+        }
+
         public EnemyBullets(Point pos, Point dir, Size size) : base(pos, dir, size)
         {
-            Power = 10;
-            Damage = 5;
+            power = DEFAULT_POWER;
+            damage = DEFAULT_DAMAGE;
+        }
+
+        public EnemyBullets(Point pos, Point dir, int power, int damage) : base(pos, dir, power, damage)
+        {
+            size = new Size(DEFAULT_WIDTH, DEFAULT_HEIGHT);
+        }
+
+        public EnemyBullets(Point pos, Point dir, Size size, int power, int damage) : base(pos, dir, size, power, damage)
+        {
         }
 
         //Drawing at game screen
@@ -34,7 +54,7 @@ namespace FirstGame
         private void DestroyingObject(EnemyBullets enemyBullet)
         {
             VisualEffect.LoadObjects(
-                            enemyBullet.PosX + enemyBullet.Size / 2, enemyBullet.PosY + enemyBullet.Size / 2, 2); //Spawn in place of the object of "visual effects
+                            enemyBullet.PosX + enemyBullet.WidthSize / 2, enemyBullet.PosY + enemyBullet.HeightSize / 2, 2); //Spawn in place of the object of "visual effects
         }
 
         public static void Interaction()
@@ -66,7 +86,7 @@ namespace FirstGame
         }
 
         //Loading Stars
-        static public void LoadObjects(int posX, int posY, int sizeH, int numberOfBullets)
+        static public void LoadObjects(int posX, int posY, int posSizeWidth, int posSizeHeigth, int numberOfBullets)
         {       
             for (int ich = -numberOfBullets; ich <= numberOfBullets; ich++)
             {
@@ -75,7 +95,7 @@ namespace FirstGame
                     if (ich == 0 && jch == 0) { continue; }
                     if (Math.Abs(ich) + Math.Abs(jch) == numberOfBullets + 1 || (ich == 0 && Math.Abs(jch) == numberOfBullets) || (jch == 0 && Math.Abs(ich) == numberOfBullets))
                         enemyBullets.Add(new EnemyBullets(
-                            new Point(posX + sizeH / 2 + ich * sizeH / 4, posY + sizeH / 2 + jch * sizeH / 4),
+                            new Point(posX + posSizeWidth / 2 + ich * posSizeWidth / 4, posY + posSizeHeigth / 2 + jch * posSizeHeigth / 4),
                             new Point(2 * ich, 2 * jch), new Size(20, 14)));
                 }
             }

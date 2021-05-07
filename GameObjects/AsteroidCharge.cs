@@ -9,26 +9,33 @@ namespace FirstGame
         public static List<AsteroidCharge> asteroidCharges = new List<AsteroidCharge>();
         private static Random rnd = new Random();
 
-        int power = 5;
-        int damage = 5;
-
         //Image at screen
-        Image img = Image.FromFile("Content\\pictures\\charge.png");
-        
-        //Default constructor
+        static Image img = Image.FromFile("Content\\pictures\\charge.png");
+        const int DEFAULT_POWER = 100;
+        const int DEFAULT_DAMAGE = 15;
+        readonly int DEFAULT_WIDTH = img.Width;
+        readonly int DEFAULT_HEIGHT = img.Height;
+
         public AsteroidCharge(Point pos, Point dir) : base(pos, dir)
         {
+            power = DEFAULT_POWER;
+            damage = DEFAULT_DAMAGE;
+            size = new Size(DEFAULT_WIDTH, DEFAULT_HEIGHT);
         }
 
-        //Constructor with "power"
         public AsteroidCharge(Point pos, Point dir, Size size) : base(pos, dir, size)
         {
+            power = DEFAULT_POWER;
+            damage = DEFAULT_DAMAGE;
         }
 
-        public AsteroidCharge(Point pos, Point dir, Size size, int power, int damage) : base(pos, dir, size)
+        public AsteroidCharge(Point pos, Point dir, int power, int damage) : base(pos, dir, power, damage)
         {
-            this.power = power;
-            this.damage = damage;
+            size = new Size(DEFAULT_WIDTH, DEFAULT_HEIGHT);
+        }
+
+        public AsteroidCharge(Point pos, Point dir, Size size, int power, int damage) : base(pos, dir, size, power, damage)
+        {
         }
 
         //Drawing at game screen
@@ -55,10 +62,10 @@ namespace FirstGame
         {
             VisualEffect.LoadObjects(
                                 asteroidCharge.PosX + asteroidCharge.HeightSize / 2, asteroidCharge.PosY + asteroidCharge.WidthSize / 2, 2); //Spawn in place of the object"visual effects"
-            Ship.ship.ScoreUp(asteroidCharge.Power);
+            Ship.ship.ScoreUp(DEFAULT_POWER);
             if (!GameFunctional.isBossFight)
             {
-                Ship.ship.BossTimeUp(asteroidCharge.Power);
+                Ship.ship.BossTimeUp(DEFAULT_POWER);
             }
         }
 
@@ -118,7 +125,7 @@ namespace FirstGame
                     {
                         asteroidCharges.Add(new AsteroidCharge(
                             new Point(posX + posSizeWidth / 2 + ich * posSizeWidth / 4, posY + posSizeHeight / 2 + jch * posSizeHeight / 4),
-                            new Point(6 * ich + rnd.Next(-7, 7), 3 * jch + rnd.Next(-7, 7))));
+                            new Point(6 * ich + rnd.Next(-7, 7), 3 * jch + rnd.Next(-7, 7)), 5, 5));
                     }
                     else
                     {

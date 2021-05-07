@@ -75,34 +75,43 @@ namespace FirstGame
             switch (controlerRecieve())
             {
                 case "1\r":
+                    GameFunctional.GameStart();
                     ship.Up();
                     break;
                 case "2\r":
+                    GameFunctional.GameStart();
                     ship.Up();
                     ship.Right();
                     break;
                 case "3\r":
+                    GameFunctional.GameStart();
                     ship.Right();
                     break;
                 case "4\r":
+                    GameFunctional.GameStart();
                     ship.Right();
                     ship.Down();
                     break;
                 case "5\r":
+                    GameFunctional.GameStart();
                     ship.Down();
                     break;
                 case "6\r":
+                    GameFunctional.GameStart();
                     ship.Down();
                     ship.Left();
                     break;
                 case "7\r":
+                    GameFunctional.GameStart();
                     ship.Left();
                     break;
                 case "8\r":
+                    GameFunctional.GameStart();
                     ship.Up();
                     ship.Left();
                     break;
                 case "9\r":
+                    GameFunctional.GameStart();
                     isShot = true;
                     break;
                 default: break;

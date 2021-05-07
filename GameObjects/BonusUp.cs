@@ -10,11 +10,30 @@ namespace FirstGame
         private static Random rnd = new Random();
 
         //Image at screen
-        Image img = Image.FromFile("Content\\pictures\\bonus.png");
+        static Image img = Image.FromFile("Content\\pictures\\bonus.png");
+        const int DEFAULT_POWER = 10;
+        readonly int DEFAULT_WIDTH = img.Width;
+        readonly int DEFAULT_HEIGHT = img.Height;
+
         //Constructor
+        public BonusUp(Point pos, Point dir) : base(pos, dir)
+        {
+            power = DEFAULT_POWER;
+            size = new Size(DEFAULT_WIDTH, DEFAULT_HEIGHT);
+        }
+
         public BonusUp(Point pos, Point dir, Size size) : base(pos, dir, size)
         {
-            power = 10;
+            power = DEFAULT_POWER;
+        }
+
+        public BonusUp(Point pos, Point dir, int power, int damage) : base(pos, dir, power, damage)
+        {
+            size = new Size(DEFAULT_WIDTH, DEFAULT_HEIGHT);
+        }
+
+        public BonusUp(Point pos, Point dir, Size size, int power, int damage) : base(pos, dir, size, power, damage)
+        {
         }
 
         //Drawing at game screen
@@ -28,8 +47,8 @@ namespace FirstGame
         {
             pos.X = pos.X + dir.X;
             pos.Y = pos.Y + dir.Y;
-            if (pos.Y < Size) dir.Y = -dir.Y;
-            if (pos.Y + Size > GameFunctional.Height) dir.Y = -dir.Y;
+            if (pos.Y < HeightSize) dir.Y = -dir.Y;
+            if (pos.Y + WidthSize > GameFunctional.Height) dir.Y = -dir.Y;
         }
 
         private void DestroyingObject(BonusUp bonus)
@@ -37,7 +56,7 @@ namespace FirstGame
             Ship.ship.ScoreUp(0);
             if (!GameFunctional.isBossFight)
             {
-                Ship.ship.BossTimeUp(30);
+                Ship.ship.BossTimeUp(0);
             }
         }
 
@@ -76,13 +95,12 @@ namespace FirstGame
         {
             int speedX = rnd.Next(2, 3);
             int speedY = rnd.Next(2, 3);
-            //int size = rnd.Next(50, 150);
             int sizeX = 45;
             int sizeY = 25;
             bonusUp.Add(new BonusUp(
                 new Point(
                     GameFunctional.Width + rnd.Next(0, 400), GameFunctional.Height / 2 + rnd.Next(-400, 400)),
-                new Point(-speedX, speedY), new Size(sizeX, sizeY)));
+                new Point(-speedX, speedY)));
         }
     }
 }

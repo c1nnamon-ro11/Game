@@ -10,16 +10,31 @@ namespace FirstGame
         private static Random rnd = new Random();
 
         //Image at screen
-        Image img = Image.FromFile("Content\\pictures\\asteroid.png");
+        static Image img = Image.FromFile("Content\\pictures\\asteroid.png");
+        const int DEFAULT_POWER = 100;
+        const int DEFAULT_DAMAGE = 15;
+        readonly int DEFAULT_WIDTH = img.Width;
+        readonly int DEFAULT_HEIGHT = img.Height;
 
-        //Constructor with "power"
-        public Asteroid(Point pos, Point dir, Size size) : base(pos, dir, size)
+        public Asteroid(Point pos, Point dir) : base(pos, dir)
         {
-            Power = 100;
-            Damage = 15;
+            power = DEFAULT_POWER;
+            damage = DEFAULT_DAMAGE;
+            size = new Size(DEFAULT_WIDTH, DEFAULT_HEIGHT);
         }
 
-        public Asteroid(Point pos, Point dir, Size size, int power, int damage) : base(pos, dir, size)
+        public Asteroid(Point pos, Point dir, Size size) : base(pos, dir, size)
+        {
+            power = DEFAULT_POWER;
+            damage = DEFAULT_DAMAGE;
+        }
+
+        public Asteroid(Point pos, Point dir, int power, int damage) : base(pos, dir, power, damage)
+        {
+            size = new Size(DEFAULT_WIDTH, DEFAULT_HEIGHT);
+        }
+
+        public Asteroid(Point pos, Point dir, Size size, int power, int damage) : base(pos, dir, size, power, damage)
         {
         }
 
@@ -47,14 +62,14 @@ namespace FirstGame
         //Procedure before removing game object from gamescreen
         public void DestroyingObject(Asteroid asteroid)
         {
-            AsteroidCharge.LoadAsteroidCharges(asteroid.PosX, asteroid.PosY, asteroid.HeightSize, 1);
+            AsteroidCharge.LoadAsteroidCharges(asteroid.PosX, asteroid.PosY, asteroid.HeightSize, asteroid.WidthSize, 1);
             VisualEffect.LoadObjects(
                                 asteroid.PosX + asteroid.WidthSize / 2, asteroid.PosY + asteroid.HeightSize / 2, 2); //Spawn in place of the object"visual effects"
-            Ship.ship.ScoreUp(asteroid.Power);
+            Ship.ship.ScoreUp(DEFAULT_POWER);
 
             if (!GameFunctional.isBossFight)
             {
-                Ship.ship.BossTimeUp(asteroid.Power);
+                Ship.ship.BossTimeUp(DEFAULT_POWER);
             }
         }
 
@@ -107,12 +122,9 @@ namespace FirstGame
             {
                 int speedX = rnd.Next(2, 7);
                 int speedY = rnd.Next(2, 7);
-                int widthSize = 70;
-                int heightSize = 70;
                 asteroids.Add(new Asteroid(
-                    new Point(
-                        GameFunctional.Width + rnd.Next(100, 400), GameFunctional.Height / 2 - rnd.Next(-200, 200)),
-                    new Point(-speedX, speedY), new Size(widthSize, heightSize)));
+                    new Point(GameFunctional.Width + rnd.Next(100, 400), GameFunctional.Height / 2 - rnd.Next(-200, 200)),
+                    new Point(-speedX, speedY)));
             }
         }
     }

@@ -4,16 +4,20 @@ namespace FirstGame
 {
     public class Ship : BaseObject
     {
-        public static Ship ship = new Ship(new Point(30, 450), new Point(3, 3), new Size(20, 15));
+
+        public static Ship ship = new Ship(new Point(30, 450), new Point(3, 3), new Size(DEFAULT_WIDTH, DEFAULT_HEIGHT));
+
+        //Image at screen
+        static Image img = Image.FromFile("Content\\pictures\\ship.png");
+        static readonly int DEFAULT_WIDTH = img.Width;
+        static readonly int DEFAULT_HEIGHT = img.Height;
+
         //Fields and events of class
         public static event Message MessageDie; //Death 
         int energy = 300;                       //НР 
         int score = 0;                          //Player`s score
         protected int lvl = 2;                  //Ship lvl
         int bossTime = 0;                       //Score for spawn new boss target
-
-        //Image at screen
-        Image img = Image.FromFile("Content\\pictures\\ship.png");
 
         //Properties (HP,Score, Boss score)
         public int Energy

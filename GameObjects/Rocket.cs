@@ -10,13 +10,32 @@ namespace FirstGame
         private static Random rnd = new Random();
 
         //Image at screen
-        Image img = Image.FromFile("Content\\pictures\\rocket.png");
+        static Image img = Image.FromFile("Content\\pictures\\rocket.png");
+        const int DEFAULT_POWER = 10;
+        const int DEFAULT_DAMAGE = 10;
+        readonly int DEFAULT_WIDTH = img.Width;
+        readonly int DEFAULT_HEIGHT = img.Height;
 
-        //Constructor with "power"
+        public Rocket(Point pos, Point dir) : base(pos, dir)
+        {
+            power = DEFAULT_POWER;
+            damage = DEFAULT_DAMAGE;
+            size = new Size(DEFAULT_WIDTH, DEFAULT_HEIGHT);
+        }
+
         public Rocket(Point pos, Point dir, Size size) : base(pos, dir, size)
         {
-            Power = 5;
-            Damage = 10;
+            power = DEFAULT_POWER;
+            damage = DEFAULT_DAMAGE;
+        }
+
+        public Rocket(Point pos, Point dir, int power, int damage) : base(pos, dir, power, damage)
+        {
+            size = new Size(DEFAULT_WIDTH, DEFAULT_HEIGHT);
+        }
+
+        public Rocket(Point pos, Point dir, Size size, int power, int damage) : base(pos, dir, size, power, damage)
+        {
         }
 
         //Drawing at game screen
@@ -30,7 +49,7 @@ namespace FirstGame
         override public void Update()
         {
             pos.X = pos.X + dir.X;
-            if (pos.X + Size + 20 < 0)
+            if (pos.X + WidthSize + 20 < 0)
             {
                 pos.X = GameFunctional.Width + 10;
                 pos.Y = rnd.Next(0, GameFunctional.Height);
@@ -41,11 +60,11 @@ namespace FirstGame
         public void DestroyingObject(Rocket rocket)
         {
             VisualEffect.LoadObjects(
-                                rocket.PosX + rocket.Size / 2, rocket.PosY + rocket.Size / 2, 2); //Spawn in place of the object"visual effects"
-            Ship.ship.ScoreUp(rocket.Size);
+                                rocket.PosX + rocket.WidthSize / 2, rocket.PosY + rocket.HeightSize / 2, 2); //Spawn in place of the object"visual effects"
+            Ship.ship.ScoreUp(DEFAULT_POWER);
             if (!GameFunctional.isBossFight)
             {
-                Ship.ship.BossTimeUp(rocket.Size);
+                Ship.ship.BossTimeUp(DEFAULT_POWER);
             }
         }
 
@@ -95,11 +114,10 @@ namespace FirstGame
             for (int i = 0; i < numberOfRockets; i++)
             {
                 int r = rnd.Next(10, 15);
-                //int size = 30;
                 rockets.Add(new Rocket(
                     new Point(
                         GameFunctional.Width + rnd.Next(1, 100) * 10, rnd.Next(0, GameFunctional.Height)),
-                    new Point(-r, r), new Size(70, 20)));
+                    new Point(-r, r)));
             }
         }
     }

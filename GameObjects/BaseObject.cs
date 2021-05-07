@@ -22,6 +22,12 @@ namespace FirstGame
         protected Image img; //object image
 
         //Constructor
+        public BaseObject(Point pos, Point dir)
+        {
+            this.pos = pos;
+            this.dir = dir;
+        }
+
         public BaseObject(Point pos, Point dir, Size size)
         {
             this.pos = pos;
@@ -29,13 +35,23 @@ namespace FirstGame
             this.size = size;
         }
 
-        public BaseObject(Point pos, Point dir)
+        public BaseObject(Point pos, Point dir, int power, int damage)
         {
             this.pos = pos;
             this.dir = dir;
-            size.Width = img.Width;
-            size.Height = img.Height;
+            this.power = power;
+            this.damage = damage;
         }
+
+        public BaseObject(Point pos, Point dir, Size size, int power, int damage)
+        {
+            this.pos = pos;
+            this.dir = dir;
+            this.size = size;
+            this.power = power;
+            this.damage = damage;
+        }
+
         //Properties 
         public int PosX
         {
@@ -85,7 +101,11 @@ namespace FirstGame
 
         public bool Collision(ICollision o)
         {
-            if (o.Rect.IntersectsWith(this.Rect)) return true; else return false;
+            if (o.Rect.IntersectsWith(this.Rect))
+            {
+                return true;
+            }
+            else return false;
         }
 
         public Rectangle Rect

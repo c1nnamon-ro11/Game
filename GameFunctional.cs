@@ -35,7 +35,7 @@ namespace FirstGame
 
         //Game fucntional consts
         private const int SCORE_FOR_BONUS = 150;
-        private const int BOSS_SPAWN_TIME = 1000;
+        private const int BOSS_SPAWN_TIME = 500;
 
         //Timer`s values
         private const int GAME_RATE = 10;
@@ -75,12 +75,27 @@ namespace FirstGame
             Timer();    //Initialize and run all timers
             startGameMessage();
 
-            //Events
-            GameScreen.KeyDown += GameScreen_KeyDown;   //Ship control
-            GameScreen.KeyUp += GameScreen_KeyUp;
+            //Events           
             Ship.MessageDie += Finish;                  //End Game
+            if (!Controler.IsControlerConnected)
+            {
+                GameScreen.KeyDown += GameScreen_KeyDown;   //Ship control
+                GameScreen.KeyUp += GameScreen_KeyUp;
+            }
             CountPlus += Game_Counter;                  //Bullet count
             Shot += ShotTimer_Tick;
+        }
+
+        //Start game
+        public static void GameStart()
+        {
+            if (!startGame)
+            {
+                Clear();
+                Load();
+                MusicEffects.BackMusic();
+                startGame = true;
+            }
         }
 
         //Keyboard ship control
@@ -107,14 +122,7 @@ namespace FirstGame
         //Keyboard ship control
         private static void GameScreen_KeyDown(object sender, KeyEventArgs e)
         {
-            //Start game
-            if (!startGame)
-            {
-                Clear();
-                Load();
-                MusicEffects.BackMusic();
-                startGame = true;
-            }
+            GameStart();
             if (e.KeyCode == Keys.Up)
             {
                 controlUp = true;
@@ -228,7 +236,7 @@ namespace FirstGame
                     {
                         Bullet.bullets.Add(
                             new Bullet(
-                                new Point(Ship.ship.Rect.X + 10, Ship.ship.Rect.Y + i * 8 + Ship.ship.Size / 2 - 1), new Point(4, 0), new Size(6, 2), true));
+                                new Point(Ship.ship.Rect.X + 10, Ship.ship.Rect.Y + i * 8 + Ship.ship.HeightSize / 2 - 1), new Point(4, 0), new Size(6, 2), true));
                     }
 
                     //Second type of bullets
@@ -236,7 +244,7 @@ namespace FirstGame
                     {
                         Bullet.bullets.Add(
                         new Bullet(
-                            new Point(Ship.ship.Rect.X + 10, Ship.ship.Rect.Y + Ship.ship.Size / 2 - 1), new Point(4, i), new Size(4, 1), false));
+                            new Point(Ship.ship.Rect.X + 10, Ship.ship.Rect.Y + Ship.ship.HeightSize / 2 - 1), new Point(4, i), new Size(4, 1), false));
                     }
                 }
                 CountPlus();
@@ -258,7 +266,7 @@ namespace FirstGame
             if (isBossFight)  //Is boss
             {
                 int numberOfBullets = 2; //parameter number of bullets per tick
-                EnemyBullets.LoadObjects(Boss.boss.PosX, Boss.boss.PosY, Boss.boss.Size, numberOfBullets);
+                EnemyBullets.LoadObjects(Boss.boss.PosX, Boss.boss.PosY, Boss.boss.WidthSize, Boss.boss.HeightSize, numberOfBullets);
 
             }
         }
@@ -376,7 +384,7 @@ namespace FirstGame
             Star.Interaction();
             if (Star.stars.Count == 0 && !isBossFight)
             {
-                Star.LoadObjects(initialNumberOfStars);
+                //Star.LoadObjects(initialNumberOfStars);
                 initialNumberOfStars++;
             }
 
@@ -398,6 +406,12 @@ namespace FirstGame
 
             //Boss
             Boss.Interaction();
+            if(Boss.boss != null && Boss.boss.ulta && Boss.boss.Power < Boss.DEFAULT_POWER/2)
+            {
+                Boss.boss.ulta = false;
+                Rocket.LoadObjects(30);
+            }
+
             if (!isBossFight && Ship.ship.BossTime >= BOSS_SPAWN_TIME)
             {
                 Boss.LoadObjects();
@@ -414,7 +428,6 @@ namespace FirstGame
             Bullet.Interaction();
         }
 
-        //Перевірити чи можна кліри замутити через парамс
         //Create and upload objects to the screen
         static public void Load()
         {
@@ -432,15 +445,6 @@ namespace FirstGame
             Rocket.rockets.Clear();
         }
 
-
-        static public void Clear(params List<BaseObject>[] gameObjects)
-        {
-            foreach (var gameObject in gameObjects)
-            {
-                gameObject.Clear();
-            }
-        }
-
         //Method that stops all timers
         static public void StopTimers(params Timer[] timers)
         {
@@ -455,10 +459,6 @@ namespace FirstGame
         {
             //Stop all timers
             StopTimers(timer, scoreTimer, shotTimer, bossShotTimer);
-            /*timer.Stop();
-            scoreTimer.Stop();
-            shotTimer.Stop();
-            bossShotTimer.Stop();*/
 
             MusicEffects.MusicStopMethod();
             //Display information

@@ -10,13 +10,32 @@ namespace FirstGame
         private static Random rnd = new Random();
 
         //Image at screen
-        Image img = Image.FromFile("Content\\pictures\\star.png");
+        static Image img = Image.FromFile("Content\\pictures\\star.png");
+        const int DEFAULT_POWER = 10;
+        const int DEFAULT_DAMAGE = 10;
+        readonly int DEFAULT_WIDTH = img.Width;
+        readonly int DEFAULT_HEIGHT = img.Height;
 
-        //Constructor with "power"
+        public Star(Point pos, Point dir) : base(pos, dir)
+        {
+            power = DEFAULT_POWER;
+            damage = DEFAULT_DAMAGE;
+            size = new Size(DEFAULT_WIDTH, DEFAULT_HEIGHT);
+        }
+
         public Star(Point pos, Point dir, Size size) : base(pos, dir, size)
         {
-            Power = 10;
-            Damage = 10;
+            power = DEFAULT_POWER;
+            damage = DEFAULT_DAMAGE;
+        }
+
+        public Star(Point pos, Point dir, int power, int damage) : base(pos, dir, power, damage)
+        {
+            size = new Size(DEFAULT_WIDTH, DEFAULT_HEIGHT);
+        }
+
+        public Star(Point pos, Point dir, Size size, int power, int damage) : base(pos, dir, size, power, damage)
+        {
         }
 
         //Drawing at game screen
@@ -31,23 +50,23 @@ namespace FirstGame
         {
             pos.X = pos.X + dir.X;
             pos.Y = pos.Y + dir.Y;
-            if (pos.X + Size + 20 < 0)
+            if (pos.X + WidthSize + 20 < 0)
             {
                 pos.X = GameFunctional.Width + 10;
                 pos.Y = rnd.Next(0, GameFunctional.Height);
             }
             if (pos.Y < 0) dir.Y = -dir.Y;
-            if (pos.Y + Size > GameFunctional.Height) dir.Y = -dir.Y;
+            if (pos.Y + HeightSize > GameFunctional.Height) dir.Y = -dir.Y;
         }
 
         public void DestroyingObject(Star star)
         {
             VisualEffect.LoadObjects(
-                                star.PosX + star.Size / 2, star.PosY + star.Size / 2, 2); //Spawn in place of the object"visual effects"
-            Ship.ship.ScoreUp(star.Size);
+                                star.PosX + star.WidthSize / 2, star.PosY + star.HeightSize / 2, 2); //Spawn in place of the object"visual effects"
+            Ship.ship.ScoreUp(DEFAULT_POWER);
             if (!GameFunctional.isBossFight)
             {
-                Ship.ship.BossTimeUp(star.Size);
+                Ship.ship.BossTimeUp(DEFAULT_POWER);
             }
         }
 
@@ -102,7 +121,7 @@ namespace FirstGame
                 stars.Add(new Star(
                     new Point(
                         GameFunctional.Width + rnd.Next(1, 100) * 10, rnd.Next(0, GameFunctional.Height)),
-                    new Point(-speedX, speedY), new Size(size, size)));
+                    new Point(-speedX, speedY)));
             }
         }
     }
