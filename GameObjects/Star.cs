@@ -40,18 +40,18 @@ namespace FirstGame
             if (pos.Y + Size > GameFunctional.Height) dir.Y = -dir.Y;
         }
 
-        private void DestroyingObject(Star star, Ship ship)
+        public void DestroyingObject(Star star)
         {
             VisualEffect.LoadObjects(
                                 star.PosX + star.Size / 2, star.PosY + star.Size / 2, 2); //Spawn in place of the object"visual effects"
-            ship.ScoreUp(star.Size);
+            Ship.ship.ScoreUp(star.Size);
             if (!GameFunctional.isBossFight)
             {
-                ship.BossTimeUp(star.Size);
+                Ship.ship.BossTimeUp(star.Size);
             }
         }
 
-        public static void Interaction(List<Bullet> bullets, Ship ship, ref  int index)
+        public static void Interaction()
         {
             foreach (var star in stars)
             {
@@ -59,28 +59,26 @@ namespace FirstGame
                 if (GameFunctional.startGame)
                 {
                     //Collision of object and bullet  
-                    for (int j = 0; j < bullets.Count; j++)
+                    foreach (var bullet in Bullet.bullets)
                     {
-                        if (bullets[j].Collision(star))
+                        if (bullet.Collision(star))
                         {
                             MusicEffects.HitSound();
-                            star.PowerLow(bullets[j].Power);    //Object "power" reduction
+                            star.PowerLow(bullet.Power);    //Object "power" reduction
+                            Bullet.DestroyingObject(bullet);
                             if (star.Power <= 0)    //Procedure or destroyingobject (if power less then zero)
                             {
-                                star.DestroyingObject(star, ship);
+                                star.DestroyingObject(star);
                             }
-                            bullets.RemoveAt(j);
-                            j--;
-                            index--;
                         }
                     }
                     //Collision of object and ship 
-                    if (ship.Collision(star))
+                    if (Ship.ship.Collision(star))
                     {
                         MusicEffects.HitSound();
                         star.Power = 0;
-                        ship.EnergyLow(star.Damage);
-                        star.DestroyingObject(star, ship);
+                        Ship.ship.EnergyLow(star.Damage);
+                        star.DestroyingObject(star);
                     }
                 }
             }
@@ -89,7 +87,7 @@ namespace FirstGame
 
         //Removing objects from gamescreen
         public static void RemoveObjectFromCollection()
-        {            
+        {
             stars.RemoveAll(item => item.Power <=0);
         }
 

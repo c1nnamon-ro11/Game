@@ -31,13 +31,13 @@ namespace FirstGame
             pos.Y = pos.Y + dir.Y;
         }
 
-        private void DestroyingObject(EnemyBullets enemyBullet, Ship ship)
+        private void DestroyingObject(EnemyBullets enemyBullet)
         {
             VisualEffect.LoadObjects(
                             enemyBullet.PosX + enemyBullet.Size / 2, enemyBullet.PosY + enemyBullet.Size / 2, 2); //Spawn in place of the object of "visual effects
         }
 
-        public static void Interaction(Ship ship)
+        public static void Interaction()
         {
             foreach (var enemyBullet in enemyBullets)
             {
@@ -45,12 +45,12 @@ namespace FirstGame
                 if (GameFunctional.startGame)
                 {
                     //Collision of object and ship 
-                    if (ship.Collision(enemyBullet))
+                    if (Ship.ship.Collision(enemyBullet))
                     {
                         MusicEffects.HitSound();
                         enemyBullet.Power = 0;
-                        ship.EnergyLow(enemyBullet.Damage);
-                        enemyBullet.DestroyingObject(enemyBullet, ship);
+                        Ship.ship.EnergyLow(enemyBullet.Damage);
+                        enemyBullet.DestroyingObject(enemyBullet);
                     }                   
                 }
             }

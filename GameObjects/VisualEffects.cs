@@ -33,11 +33,11 @@ namespace FirstGame
             }
         }
 
-        private void DestroyingObject(Ship ship)
+        public void DestroyingObject()
         {
         }
 
-        public static void Interaction(Ship ship)
+        public static void Interaction()
         {
             foreach (var visualEffect in visualEffects)
             {

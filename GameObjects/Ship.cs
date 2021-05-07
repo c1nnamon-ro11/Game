@@ -4,6 +4,7 @@ namespace FirstGame
 {
     public class Ship : BaseObject
     {
+        public static Ship ship = new Ship(new Point(30, 450), new Point(3, 3), new Size(20, 15));
         //Fields and events of class
         public static event Message MessageDie; //Death 
         int energy = 300;                       //НР 
@@ -52,8 +53,12 @@ namespace FirstGame
         }
         public void LvlUp(int n)
         {
-            lvl += n;
-            if (lvl == 0) lvl = 1;
+            Lvl += n;
+            if (Lvl == 0) Lvl = 1;
+            if (Lvl == 7)
+            {
+                Lvl = 6;
+            }
         }
 
         //Empty constructor
@@ -74,19 +79,31 @@ namespace FirstGame
         }
         public void Up()
         {
-            if (pos.Y > 0) pos.Y = pos.Y­ - dir.Y;
+            if (pos.Y > 0)
+            {
+                pos.Y = pos.Y­ - dir.Y;
+            }
         }
         public void Down()
         {
-            if (pos.Y + 80 < GameFunctional.Height) pos.Y = pos.Y + dir.Y;
+            if (pos.Y + 80 < GameFunctional.Height)
+            {
+                pos.Y = pos.Y + dir.Y;
+            }
         }
         public void Left()
         {
-            if (pos.X > 0) pos.X = pos.X - dir.X;
+            if (pos.X > 0)
+            {
+                pos.X = pos.X - dir.X;
+            }
         }
         public void Right()
         {
-            if (pos.X + 50 < GameFunctional.Width) pos.X = pos.X + dir.X;
+            if (pos.X + 50 < GameFunctional.Width)
+            {
+                pos.X = pos.X + dir.X;
+            }
         }
 
         //Death

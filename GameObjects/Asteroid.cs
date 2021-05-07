@@ -15,8 +15,12 @@ namespace FirstGame
         //Constructor with "power"
         public Asteroid(Point pos, Point dir, Size size) : base(pos, dir, size)
         {
-            Power = 50;
+            Power = 100;
             Damage = 15;
+        }
+
+        public Asteroid(Point pos, Point dir, Size size, int power, int damage) : base(pos, dir, size)
+        {
         }
 
         //Drawing at game screen
@@ -31,29 +35,31 @@ namespace FirstGame
         {
             pos.X = pos.X + dir.X;
             pos.Y = pos.Y + dir.Y;
-            if (pos.X + Size + 20 < 0)
+            if (pos.X + WidthSize + 20 < 0)
             {
                 pos.X = GameFunctional.Width + 10;
                 pos.Y = rnd.Next(0, GameFunctional.Height);
             }
             if (pos.Y < 0) dir.Y = -dir.Y;
-            if (pos.Y + Size > GameFunctional.Height) dir.Y = -dir.Y;
+            if (pos.Y + HeightSize > GameFunctional.Height) dir.Y = -dir.Y;
         }
 
-        private void DestroyingObject(Asteroid asteroid, Ship ship)
+        //Procedure before removing game object from gamescreen
+        public void DestroyingObject(Asteroid asteroid)
         {
-            AsteroidCharge.LoadAsteroidCharges(asteroid.PosX, asteroid.PosY, asteroid.Size, 1);
+            AsteroidCharge.LoadAsteroidCharges(asteroid.PosX, asteroid.PosY, asteroid.HeightSize, 1);
             VisualEffect.LoadObjects(
-                                asteroid.PosX + asteroid.Size / 2, asteroid.PosY + asteroid.Size / 2, 2); //Spawn in place of the object"visual effects"
-            ship.ScoreUp(asteroid.Size);
+                                asteroid.PosX + asteroid.WidthSize / 2, asteroid.PosY + asteroid.HeightSize / 2, 2); //Spawn in place of the object"visual effects"
+            Ship.ship.ScoreUp(asteroid.Power);
 
             if (!GameFunctional.isBossFight)
             {
-                ship.BossTimeUp(asteroid.Size);
+                Ship.ship.BossTimeUp(asteroid.Power);
             }
         }
 
-        public static void Interaction(List<Bullet> bullets, Ship ship, ref int index)
+        //Functional logic of Asteroid
+        public static void Interaction()
         {
             foreach (var asteroid in asteroids)
             {
@@ -61,29 +67,27 @@ namespace FirstGame
                 if (GameFunctional.startGame)
                 {
                     //Collision of object and bullet  
-                    for (int j = 0; j < bullets.Count; j++)
+                    foreach (var bullet in Bullet.bullets)
                     {
-                        if (bullets[j].Collision(asteroid))
+                        if (bullet.Collision(asteroid))
                         {
                             MusicEffects.HitSound();
-                            asteroid.PowerLow(bullets[j].Power);    //Object "power" reduction
+                            asteroid.PowerLow(bullet.Power);    //Object "power" reduction
+                            Bullet.DestroyingObject(bullet);
                             if (asteroid.Power <= 0)    //Procedure or destroyingobject (if power less then zero)
                             {
-                                asteroid.DestroyingObject(asteroid, ship);
+                                asteroid.DestroyingObject(asteroid);
                             }
-                            bullets.RemoveAt(j);
-                            j--;
-                            index--;
                         }
                     }
                     //Collision of object and ship 
-                    if (ship.Collision(asteroid))
+                    if (Ship.ship.Collision(asteroid))
                     {
                         MusicEffects.HitSound();
                         asteroid.Power = 0;
-                        ship.EnergyLow(asteroid.Damage);
-                        ship.LvlUp(-1);
-                        asteroid.DestroyingObject(asteroid, ship);
+                        Ship.ship.EnergyLow(asteroid.Damage);
+                        Ship.ship.LvlUp(-1);
+                        asteroid.DestroyingObject(asteroid);
                     }
                 }
             }
@@ -93,14 +97,7 @@ namespace FirstGame
         //Removing objects from gamescreen
         public static void RemoveObjectsFromCollection()
         {
-            //int numberOfObjectsBeforeRemoving = asteroids.Count;
-
             asteroids.RemoveAll(item => item.Power <= 0);
-
-            /*if (!GameFunctional.isBossFight)
-            {
-                LoadObjects(numberOfObjectsBeforeRemoving - asteroids.Count);
-            }*/
         }
 
         //Loading Asteroids
@@ -110,12 +107,12 @@ namespace FirstGame
             {
                 int speedX = rnd.Next(2, 7);
                 int speedY = rnd.Next(2, 7);
-                //int size = rnd.Next(50, 150);
-                int size = 70;
+                int widthSize = 70;
+                int heightSize = 70;
                 asteroids.Add(new Asteroid(
                     new Point(
                         GameFunctional.Width + rnd.Next(100, 400), GameFunctional.Height / 2 - rnd.Next(-200, 200)),
-                    new Point(-speedX, speedY), new Size(size, size)));
+                    new Point(-speedX, speedY), new Size(widthSize, heightSize)));
             }
         }
     }

@@ -16,17 +16,14 @@ namespace FirstGame
         public static bool startGame;
 
         //Class fields 
-        static Ship ship = new Ship(new Point(30, 450), new Point(3, 3), new Size(20, 15));
-        static List<Bullet> bullets = new List<Bullet>();
-        static int index = 0; //Bullet control (2 types of bullet)
+        public static int index = 0; //Bullet control (2 types of bullet)
 
         //The initial number of objects with the ability to change them during the game
         static bool controlUp, controlDown, controlRight, controlLeft;
-        static int initialNumberOfAsteroids = 3;
-        static int initialNumberOfStars = 1;
-        static int initialNumberOfRockets = 1;
+        static int initialNumberOfAsteroids = 5;
+        static int initialNumberOfStars = 5;
+        static int initialNumberOfRockets = 5;
         public static int bonusTime = 1;
-        const int scoreForBonus = 300;
         public static bool isBossFight = false; //boss flag
 
         //Random number generation and timers for screen refresh, points, automatic player and boss shots
@@ -35,7 +32,17 @@ namespace FirstGame
         static Timer shotTimer = new Timer();
         public static Timer bossShotTimer = new Timer();
         static Timer startGameMenu = new Timer();
-        //static public Random rnd = new Random();
+
+        //Game fucntional consts
+        private const int SCORE_FOR_BONUS = 150;
+        private const int BOSS_SPAWN_TIME = 1000;
+
+        //Timer`s values
+        private const int GAME_RATE = 10;
+        private const int SCORE_ADDITION_RATE = 5000;
+        private const int FIRING_RATE = 1000;
+        private const int BOSS_FIRING_RATE = 1000;
+        private const int GAME_MENU_RATE = 10;
 
         //Buffers that change and output
         static BufferedGraphicsContext context;
@@ -76,6 +83,7 @@ namespace FirstGame
             Shot += ShotTimer_Tick;
         }
 
+        //Keyboard ship control
         private static void GameScreen_KeyUp(object sender, KeyEventArgs e)
         {
             if (e.KeyCode == Keys.Up)
@@ -96,7 +104,7 @@ namespace FirstGame
             }
         }
 
-        //Control key exception handler
+        //Keyboard ship control
         private static void GameScreen_KeyDown(object sender, KeyEventArgs e)
         {
             //Start game
@@ -125,7 +133,7 @@ namespace FirstGame
             }
         }
 
-        //Counting function
+        //Counting number of shots
         static void Game_Counter()
         {
             if (startGame)
@@ -138,17 +146,17 @@ namespace FirstGame
         static public void Timer()
         {
             //Screen refresh rate
-            timer.Interval = 10;
+            timer.Interval = GAME_RATE;
             timer.Start();
             timer.Tick += Timer_Tick;
 
             //Time of additional points during survival
-            scoreTimer.Interval = 5000;
+            scoreTimer.Interval = SCORE_ADDITION_RATE;
             scoreTimer.Start();
             scoreTimer.Tick += ScoreTimer_Tick;
 
             //Automatic firing rate
-            shotTimer.Interval = 1000;
+            shotTimer.Interval = FIRING_RATE;
             shotTimer.Start();
             if (Controler.IsAutoFire)
             {
@@ -156,22 +164,29 @@ namespace FirstGame
             }
 
             //Automatic boss firing rate
-            bossShotTimer.Interval = 1000;
+            bossShotTimer.Interval = BOSS_FIRING_RATE;
             bossShotTimer.Start();
             bossShotTimer.Tick += BossShotTimer_Tick;
         }
 
+        //Game menu timer
         static public void startGameMessage()
         {
             //Game menu
-            startGameMenu.Interval = 1;
+            startGameMenu.Interval = GAME_MENU_RATE;
             startGameMenu.Start();
             startGameMenu.Tick += StartGameMenu_Tick;
         }
 
+        //Start game menu
         private static void StartGameMenu_Tick(object sender, EventArgs e)
         {
-            if (startGame) startGameMenu.Stop();
+            //Stop game menu, if game starts
+            if (startGame)
+            {
+                startGameMenu.Stop();
+            }
+            //Visualize game menu
             buffer.Graphics.DrawString(
                 "Press any key to start", new Font(FontFamily.GenericSansSerif, 30),
                 Brushes.White, Width / 3, Height / 4 * 3);
@@ -181,54 +196,26 @@ namespace FirstGame
         //Ship bullet exception handler
         private static void ShotTimer_Tick(object sender, EventArgs e)
         {
-            if (startGame)
-            {
-                MusicEffects.ShotSound();
-
-                //Shot mechanic (Lvl - ship level and number of bullets according to the standard principle)
-                int numberOfBullets = ship.Lvl;
-
-                //Determining type of bullets
-                if (numberOfBullets > 6) numberOfBullets = 6;
-                bool superBullet = false;
-                if (numberOfBullets > 3)
-                {
-                    superBullet = true;
-                    numberOfBullets -= 3;
-                }
-
-                //Generating bullets according to ship lvl
-                for (int i = -numberOfBullets / 2; i <= numberOfBullets / 2; i++)
-                {
-                    //First type of bullets
-                    if (numberOfBullets % 2 == 0 && i == 0 && numberOfBullets != 0) { continue; }
-                    if (superBullet) bullets.Add(new Bullet(new Point(ship.Rect.X + 10, ship.Rect.Y + i * 8 + ship.Size / 2 - 1), new Point(4, 0), new Size(6, 2)));
-
-                    //Second type of bullets
-                    else bullets.Add(new Bullet(new Point(ship.Rect.X + 10, ship.Rect.Y + ship.Size / 2 - 1), new Point(4, i), new Size(4, 1)));
-
-                    //Data transfer to constructor
-                    bullets[index].Lvl = ship.Lvl;
-                    index++;
-                }
-                CountPlus();
-            }
+            ShotTimer_Tick();
         }
 
+        //Firing method
         public static void ShotTimer_Tick()
         {
             if (startGame)
             {
                 MusicEffects.ShotSound();
                 //Shot mechanic (Lvl - ship level and number of bullets according to the standard principle)
-                int numberOfBullets = ship.Lvl;
-
+                int numberOfBullets = Ship.ship.Lvl;
+                bool isSuperBullet = false;
                 //Determining type of bullets
-                if (numberOfBullets > 6) numberOfBullets = 6;
-                bool superBullet = false;
+                if (numberOfBullets > 6)
+                {
+                    numberOfBullets = 6;
+                }
                 if (numberOfBullets > 3)
                 {
-                    superBullet = true;
+                    isSuperBullet = true;
                     numberOfBullets -= 3;
                 }
 
@@ -237,17 +224,20 @@ namespace FirstGame
                 {
                     //First type of bullets
                     if (numberOfBullets % 2 == 0 && i == 0 && numberOfBullets != 0) { continue; }
-                    if (superBullet)
+                    if (isSuperBullet)
                     {
-                        bullets.Add(new Bullet(new Point(ship.Rect.X + 10, ship.Rect.Y + i * 8 + ship.Size / 2 - 1), new Point(4, 0), new Size(6, 2)));
+                        Bullet.bullets.Add(
+                            new Bullet(
+                                new Point(Ship.ship.Rect.X + 10, Ship.ship.Rect.Y + i * 8 + Ship.ship.Size / 2 - 1), new Point(4, 0), new Size(6, 2), true));
                     }
 
                     //Second type of bullets
-                    else bullets.Add(new Bullet(new Point(ship.Rect.X + 10, ship.Rect.Y + ship.Size / 2 - 1), new Point(4, i), new Size(4, 1)));
-
-                    //Data transfer to constructor
-                    bullets[index].Lvl = ship.Lvl;
-                    index++;
+                    else
+                    {
+                        Bullet.bullets.Add(
+                        new Bullet(
+                            new Point(Ship.ship.Rect.X + 10, Ship.ship.Rect.Y + Ship.ship.Size / 2 - 1), new Point(4, i), new Size(4, 1), false));
+                    }
                 }
                 CountPlus();
             }
@@ -258,7 +248,7 @@ namespace FirstGame
         {
             if (startGame)
             {
-                ship.ScoreUp(10);
+                Ship.ship.ScoreUp(10);
             }
         }
 
@@ -278,19 +268,19 @@ namespace FirstGame
         {
             if (controlUp)
             {
-                ship.Up();
+                Ship.ship.Up();
             }
             if (controlDown)
             {
-                ship.Down();
+                Ship.ship.Down();
             }
             if (controlLeft)
             {
-                ship.Left();
+                Ship.ship.Left();
             }
             if (controlRight)
             {
-                ship.Right();
+                Ship.ship.Right();
             }
             //Force call garbage collector
             GC.Collect();
@@ -307,8 +297,8 @@ namespace FirstGame
             Background.BackGround();
             if (Controler.IsControlerConnected)
             {
-                Controler.SerialPort.WriteLine(ship.Score.ToString());
-                Controler.controlerOperation(ship);
+                Controler.SerialPort.WriteLine(Ship.ship.Score.ToString());
+                Controler.controlerOperation(Ship.ship);
                 if (Controler.IsShot)
                 {
                     ShotTimer_Tick();
@@ -317,6 +307,10 @@ namespace FirstGame
             }
 
             //Dynamic
+            if (startGame)
+            {
+                Ship.ship.Drawing();
+            }
             foreach (Rocket obj in Rocket.rockets)
             {
                 if (obj != null) obj.Drawing();
@@ -329,7 +323,7 @@ namespace FirstGame
             {
                 if (obj != null) obj.Drawing();
             }
-            foreach (Bullet bullet in bullets)
+            foreach (Bullet bullet in Bullet.bullets)
             {
                 if (startGame) bullet.Drawing();
             }
@@ -345,10 +339,6 @@ namespace FirstGame
             {
                 if (obj != null) obj.Drawing();
             }
-            /*foreach(Boss obj in Boss.boss)
-            {
-                if (obj != null) obj.Drawing();
-            }*/
             if (Boss.boss != null)
             {
                 Boss.boss.Drawing();
@@ -357,117 +347,84 @@ namespace FirstGame
             {
                 if (obj != null) obj.Drawing();
             }
-            if (startGame) ship.Drawing();
-
             //Output game information (HP of the ship, number of points, number of shots)
-            Background.DisplayOutputGameInformation(buffer, ship, ref counter);
+            Background.DisplayOutputGameInformation(buffer, Ship.ship, counter);
         }
 
         //Changing the status of objects
         static public void Update()
         {
             //The end
-            if (ship.Energy <= 0)
+            if (Ship.ship.Energy <= 0)
             {
-                ship.Energy = 0;
-                ship.Die();
+                Ship.ship.Energy = 0;
+                Ship.ship.Die();
             }
 
             //Asteroids
+            Asteroid.Interaction();
+            int asteroidDifference = initialNumberOfAsteroids - Asteroid.asteroids.Count;
+            if (asteroidDifference > 0 && !isBossFight)
             {
-                Asteroid.Interaction(bullets, ship, ref index);
-                int difference = initialNumberOfAsteroids - Asteroid.asteroids.Count;
-                if (difference > 0 && !isBossFight)
-                {
-                    Asteroid.LoadObjects(difference);
-                }
+                Asteroid.LoadObjects(asteroidDifference);
             }
 
             //Asteroids charges
-            {
-                AsteroidCharge.Interaction(bullets, ship, ref index);
-            }
+            AsteroidCharge.Interaction();
 
             //Stars
+            Star.Interaction();
+            if (Star.stars.Count == 0 && !isBossFight)
             {
-                Star.Interaction(bullets, ship, ref index);
-                if (Star.stars.Count == 0 && !isBossFight)
-                {
-                    Star.LoadObjects(initialNumberOfStars);
-                    initialNumberOfStars++;
-                }
+                Star.LoadObjects(initialNumberOfStars);
+                initialNumberOfStars++;
             }
 
             //Rocket
+            Rocket.Interaction();
+            if (Rocket.rockets.Count == 0 && !isBossFight)
             {
-                Rocket.Interaction(bullets, ship, ref index);
-                if (Rocket.rockets.Count == 0 && !isBossFight)
-                {
-                    Rocket.LoadObjects(initialNumberOfRockets);
-                    initialNumberOfRockets++;
-                }
+                Rocket.LoadObjects(initialNumberOfRockets);
+                initialNumberOfRockets++;
             }
 
             //Bonus
+            BonusUp.Interaction();
+            if (SCORE_FOR_BONUS * bonusTime < Ship.ship.Score)
             {
-                BonusUp.Interaction(ship);
-                if (scoreForBonus * bonusTime < ship.Score)
-                {
-                    BonusUp.LoadObject();
-                    bonusTime++;
-                }
+                BonusUp.LoadObject();
+                bonusTime++;
             }
 
             //Boss
+            Boss.Interaction();
+            if (!isBossFight && Ship.ship.BossTime >= BOSS_SPAWN_TIME)
             {
-                Boss.Interaction(bullets, ship, ref index);
-
-                if (!isBossFight && ship.BossTime >= 60)
-                {
-                    Boss.LoadObjects(ship);
-                    MusicEffects.BossFightMusic();
-                }
+                Boss.LoadObjects();
+                MusicEffects.BossFightMusic();
             }
 
             //Enemy Bullets
-            {
-                EnemyBullets.Interaction(ship);
-            }
+            EnemyBullets.Interaction();
 
             //Visual Effects
-            {
-                VisualEffect.Interaction(ship);
-            }
+            VisualEffect.Interaction();
 
-            //"Clearing the memory" of bullets that out of the playing field
-            for (int i = 0; i < bullets.Count; i++)
-            {
-                if (bullets[i].PosX > Width)
-                {
-                    bullets.RemoveAt(i);
-                    i--;
-                    index--;
-                }
-            }
-
-            //Update bullet and "visual effects"positions 
-            foreach (Bullet bullet in bullets)
-            {
-                if (startGame) bullet.Update();
-            }
+            //Bullets
+            Bullet.Interaction();
         }
 
+        //Перевірити чи можна кліри замутити через парамс
         //Create and upload objects to the screen
         static public void Load()
         {
             Asteroid.LoadObjects(initialNumberOfAsteroids);
             Star.LoadObjects(initialNumberOfStars);
             Rocket.LoadObjects(initialNumberOfRockets);
-            //Boss.LoadObjects(ship);
-            //Boss.RemoveObjectFromCollection();
             isBossFight = false;
         }
 
+        //Clear game area from all objects
         static public void Clear()
         {
             Asteroid.asteroids.Clear();
@@ -475,23 +432,41 @@ namespace FirstGame
             Rocket.rockets.Clear();
         }
 
+
+        static public void Clear(params List<BaseObject>[] gameObjects)
+        {
+            foreach (var gameObject in gameObjects)
+            {
+                gameObject.Clear();
+            }
+        }
+
+        //Method that stops all timers
+        static public void StopTimers(params Timer[] timers)
+        {
+            foreach (var timer in timers)
+            {
+                timer.Stop();
+            }
+        }
+
         //End game method
         static public void Finish()
         {
-            //Ship ремув, спавн віжуал ефектів з специфічним кольором, звук кабуму, запуск таймеру на 5 сек, після чого кол оцього
             //Stop all timers
-            timer.Stop();
+            StopTimers(timer, scoreTimer, shotTimer, bossShotTimer);
+            /*timer.Stop();
             scoreTimer.Stop();
             shotTimer.Stop();
-            bossShotTimer.Stop();
+            bossShotTimer.Stop();*/
 
             MusicEffects.MusicStopMethod();
             //Display information
-            Background.DisplayFinishGameStats(buffer, ship);
+            Background.DisplayFinishGameStats(buffer);
             //ScoreMenu
             if (MessageBox.Show("Want to save your record at scoreboard?", "Asteroids belt", MessageBoxButtons.YesNo) == DialogResult.Yes)
             {
-                ScoreMenu scoreMenu = new ScoreMenu(350, 200, ship.Score);
+                ScoreMenu scoreMenu = new ScoreMenu(350, 200, Ship.ship.Score);
                 scoreMenu.ShowDialog();
             }
             Application.Exit();

@@ -23,18 +23,18 @@ namespace FirstGame
             }
         }
 
-        static public void DisplayFinishGameStats(BufferedGraphics buffer, Ship ship)
+        static public void DisplayFinishGameStats(BufferedGraphics buffer)
         {
             buffer.Graphics.DrawString(
                 "The End", new Font(FontFamily.GenericSansSerif, 60, FontStyle.Underline),
                 Brushes.White, GameFunctional.Width / 2 - 200, GameFunctional.Height / 2 - 100);
             buffer.Graphics.DrawString(
-                "Your score:" + ship.Score, new Font(FontFamily.GenericSansSerif, 30),
+                "Your score:" + Ship.ship.Score, new Font(FontFamily.GenericSansSerif, 30),
                 Brushes.Bisque, GameFunctional.Width / 2 - 180, GameFunctional.Height / 2);
             buffer.Render();
         }
 
-        static public void DisplayOutputGameInformation(BufferedGraphics buffer, Ship ship, ref int counter)
+        static public void DisplayOutputGameInformation(BufferedGraphics buffer, Ship ship, int counter)
         {
             buffer.Graphics.DrawString("Energy:" + ship.Energy, SystemFonts.DefaultFont,
             Brushes.White, 0, 0);
@@ -42,6 +42,8 @@ namespace FirstGame
             Brushes.White, 100, 0);
             buffer.Graphics.DrawString("Number of shots:" + counter, SystemFonts.DefaultFont,
             Brushes.White, 200, 0);
+            buffer.Graphics.DrawString("Ship LVL:" + Ship.ship.Lvl, SystemFonts.DefaultFont,
+            Brushes.White, 400, 0);
             buffer.Render();
         }
     }

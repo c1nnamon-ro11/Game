@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 namespace FirstGame
 {
-    class BonusUp : Ship
+    class BonusUp : BaseObject
     {
         public static List<BonusUp> bonusUp = new List<BonusUp>();
         private static Random rnd = new Random();
@@ -32,16 +32,16 @@ namespace FirstGame
             if (pos.Y + Size > GameFunctional.Height) dir.Y = -dir.Y;
         }
 
-        private void DestroyingObject(BonusUp bonus, Ship ship)
+        private void DestroyingObject(BonusUp bonus)
         {
-            ship.ScoreUp(30);
+            Ship.ship.ScoreUp(0);
             if (!GameFunctional.isBossFight)
             {
-                ship.BossTimeUp(30);
+                Ship.ship.BossTimeUp(30);
             }
         }
 
-        public static void Interaction(Ship ship)
+        public static void Interaction()
         {
             foreach (var bonus in bonusUp)
             {
@@ -49,16 +49,16 @@ namespace FirstGame
                 if (GameFunctional.startGame)
                 {
                     //Collision of object and ship
-                    if (ship.Collision(bonus))
+                    if (Ship.ship.Collision(bonus))
                     {
                         MusicEffects.BonusSound();
                         bonus.Power = 0;
-                        if (ship.Lvl <= 6)
+                        if (Ship.ship.Lvl <= 5)
                         {
-                            ship.Lvl++;
+                            Ship.ship.LvlUp(1);
                         }
-                        else ship.EnergyLow(-50); //increase HP if the level is greater than the specified
-                        bonus.DestroyingObject(bonus, ship);
+                        else Ship.ship.EnergyLow(-50); //increase HP if the level is greater than the specified
+                        bonus.DestroyingObject(bonus);
                     }
                 }
             }

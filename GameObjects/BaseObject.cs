@@ -19,6 +19,7 @@ namespace FirstGame
         protected Size size; //object size
         protected int power; //object "power"
         protected int damage; //objetr "damage"
+        protected Image img; //object image
 
         //Constructor
         public BaseObject(Point pos, Point dir, Size size)
@@ -28,6 +29,13 @@ namespace FirstGame
             this.size = size;
         }
 
+        public BaseObject(Point pos, Point dir)
+        {
+            this.pos = pos;
+            this.dir = dir;
+            size.Width = img.Width;
+            size.Height = img.Height;
+        }
         //Properties 
         public int PosX
         {
@@ -41,8 +49,15 @@ namespace FirstGame
             get { return pos.Y; }
         }
 
-        public int Size
+        public int WidthSize
         {
+            set { size.Width = value; }
+            get { return size.Width; }
+        }
+
+        public int HeightSize
+        {
+            set { size.Height = value; }
             get { return size.Height; }
         }
 
@@ -67,8 +82,6 @@ namespace FirstGame
         abstract public void Drawing();
 
         abstract public void Update();
-
-        //abstract public void Interaction();
 
         public bool Collision(ICollision o)
         {

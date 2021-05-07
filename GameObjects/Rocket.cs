@@ -38,18 +38,18 @@ namespace FirstGame
             }
         }
 
-        private void DestroyingObject(Rocket rocket, Ship ship)
+        public void DestroyingObject(Rocket rocket)
         {
             VisualEffect.LoadObjects(
                                 rocket.PosX + rocket.Size / 2, rocket.PosY + rocket.Size / 2, 2); //Spawn in place of the object"visual effects"
-            ship.ScoreUp(rocket.Size);
+            Ship.ship.ScoreUp(rocket.Size);
             if (!GameFunctional.isBossFight)
             {
-                ship.BossTimeUp(rocket.Size);
+                Ship.ship.BossTimeUp(rocket.Size);
             }
         }
 
-        public static void Interaction(List<Bullet> bullets, Ship ship, ref int index)
+        public static void Interaction()
         {
             foreach (var rocket in rockets)
             {
@@ -57,28 +57,26 @@ namespace FirstGame
                 if (GameFunctional.startGame)
                 {
                     //Collision of object and bullet  
-                    for (int j = 0; j < bullets.Count; j++)
+                    foreach (var bullet in Bullet.bullets)
                     {
-                        if (bullets[j].Collision(rocket))
+                        if (bullet.Collision(rocket))
                         {
                             MusicEffects.HitSound();
-                            rocket.PowerLow(bullets[j].Power);    //Object "power" reduction
+                            rocket.PowerLow(bullet.Power);    //Object "power" reduction
+                            Bullet.DestroyingObject(bullet);
                             if (rocket.Power <= 0)    //Procedure or destroyingobject (if power less then zero)
                             {
-                                rocket.DestroyingObject(rocket, ship);
+                                rocket.DestroyingObject(rocket);
                             }
-                            bullets.RemoveAt(j);
-                            j--;
-                            index--;
                         }
                     }
                     //Collision of object and ship 
-                    if (ship.Collision(rocket))
+                    if (Ship.ship.Collision(rocket))
                     {
                         MusicEffects.HitSound();
                         rocket.Power = 0;
-                        ship.EnergyLow(rocket.Damage);
-                        rocket.DestroyingObject(rocket, ship);
+                        Ship.ship.EnergyLow(rocket.Damage);
+                        rocket.DestroyingObject(rocket);
                     }
                 }
             }

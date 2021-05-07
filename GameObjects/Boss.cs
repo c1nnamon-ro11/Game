@@ -6,10 +6,7 @@ namespace FirstGame
 {
     class Boss : BaseObject
     {
-        public static Boss boss;/* = new Boss(
-                    new Point(GameFunctional.Width + rnd.Next(10, 100), GameFunctional.Height / 2),
-                    new Point(-3, 3),
-                    new Size(350, 350));*/
+        public static Boss boss;
 
         private static Random rnd = new Random();
         //Image at screen
@@ -17,7 +14,7 @@ namespace FirstGame
         //Constructor
         public Boss(Point pos, Point dir, Size size) : base(pos, dir, size)
         {
-            power = 200;
+            power = 2000;
         }
 
         //Drawing at game screen
@@ -39,12 +36,12 @@ namespace FirstGame
             if (pos.Y > GameFunctional.Height - Size) dir.Y = -rnd.Next(2, 5);
         }
 
-        private void DestroyingObject(Boss boss, Ship ship)
+        private void DestroyingObject(Boss boss)
         {
             GameFunctional.isBossFight = false;
             VisualEffect.LoadObjects(
                             boss.PosX + boss.Size / 2, boss.PosY + boss.Size / 2, 5);  //Spawn in place of the object of "visual effects
-            ship.ScoreUp(5000);
+            Ship.ship.ScoreUp(5000);
             GameFunctional.bonusTime += 25;
             GameFunctional.Load();
         }
@@ -58,7 +55,7 @@ namespace FirstGame
             }
         }
 
-        public static void Interaction(List<Bullet> bullets, Ship ship, ref int index)
+        public static void Interaction()
         {
             //Boss
             if (GameFunctional.startGame)
@@ -66,30 +63,29 @@ namespace FirstGame
                 if (GameFunctional.isBossFight)
                 {
                     boss.Update();
-                    for (int j = 0; j < bullets.Count; j++)
+                    foreach (var bullet in Bullet.bullets)
                     {
                         //Collision of object and bullet
-                        if (bullets[j].Collision(boss))
+                        if (bullet.Collision(boss))
                         {
                             MusicEffects.HitSound();
-                            boss.PowerLow(bullets[j].Power); //Object "power" reduction
-                            bullets.RemoveAt(j);
-                            j--; index--;
+                            boss.PowerLow(bullet.Power); //Object "power" reduction
+                            Bullet.DestroyingObject(bullet);
                             //Spawn in boss place charges
                             AsteroidCharge.LoadAsteroidCharges(boss.PosX, boss.PosY, boss.Size, 1, true);
                             //Boss destoring procedure
                             if (boss.Power <= 0)
                             {
                                 MusicEffects.BonusSound();
-                                ship.LvlUp(1);
-                                boss.DestroyingObject(boss, ship);
+                                Ship.ship.LvlUp(1);
+                                boss.DestroyingObject(boss);
                             }
                         }
                     }
                     //End the game if ship collides with boss
-                    if (ship.Collision(boss))
+                    if (Ship.ship.Collision(boss))
                     {
-                        ship.Energy = 0;
+                        Ship.ship.Energy = 0;
                     }
                 }
             }
@@ -97,13 +93,13 @@ namespace FirstGame
         }
 
         //Loading Boss
-        static public void LoadObjects(Ship ship)
+        static public void LoadObjects()
         {
             boss = new Boss(new Point(GameFunctional.Width + rnd.Next(10, 100), GameFunctional.Height / 2),
                     new Point(-3, 3),
                     new Size(350, 350));
             GameFunctional.isBossFight = true;
-            ship.BossTime = 0;
+            Ship.ship.BossTime = 0;
         }
     }
 }

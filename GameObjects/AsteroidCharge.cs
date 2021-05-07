@@ -4,18 +4,31 @@ using System.Collections.Generic;
 
 namespace FirstGame
 {
-    class AsteroidCharge : Asteroid
+    class AsteroidCharge : BaseObject
     {
         public static List<AsteroidCharge> asteroidCharges = new List<AsteroidCharge>();
         private static Random rnd = new Random();
 
+        int power = 5;
+        int damage = 5;
+
         //Image at screen
         Image img = Image.FromFile("Content\\pictures\\charge.png");
+        
+        //Default constructor
+        public AsteroidCharge(Point pos, Point dir) : base(pos, dir)
+        {
+        }
+
         //Constructor with "power"
         public AsteroidCharge(Point pos, Point dir, Size size) : base(pos, dir, size)
         {
-            Power = 5;
-            Damage = 5;
+        }
+
+        public AsteroidCharge(Point pos, Point dir, Size size, int power, int damage) : base(pos, dir, size)
+        {
+            this.power = power;
+            this.damage = damage;
         }
 
         //Drawing at game screen
@@ -37,18 +50,20 @@ namespace FirstGame
             }
         }
 
-        private void DestroyingObject(AsteroidCharge asteroidCharge, Ship ship)
+        //Procedure before removing game object from gamescreen
+        public void DestroyingObject(AsteroidCharge asteroidCharge)
         {
             VisualEffect.LoadObjects(
-                                asteroidCharge.PosX + asteroidCharge.Size / 2, asteroidCharge.PosY + asteroidCharge.Size / 2, 2); //Spawn in place of the object"visual effects"
-            ship.ScoreUp(asteroidCharge.Size);
+                                asteroidCharge.PosX + asteroidCharge.HeightSize / 2, asteroidCharge.PosY + asteroidCharge.WidthSize / 2, 2); //Spawn in place of the object"visual effects"
+            Ship.ship.ScoreUp(asteroidCharge.Power);
             if (!GameFunctional.isBossFight)
             {
-                ship.BossTimeUp(asteroidCharge.Size);
+                Ship.ship.BossTimeUp(asteroidCharge.Power);
             }
         }
 
-        static public void Interaction(List<Bullet> bullets, Ship ship, ref int index)
+        //Functional logic of Asteroid
+        static public void Interaction()
         {
             //Asteroids charges
             foreach (var asteroidCharge in asteroidCharges)
@@ -57,28 +72,27 @@ namespace FirstGame
                 if (GameFunctional.startGame)
                 {
                     //Collision of object and bullet  
-                    for (int j = 0; j < bullets.Count; j++)
+                    foreach (var bullet in Bullet.bullets)
                     {
-                        if (bullets[j].Collision(asteroidCharge))
+                        if (bullet.Collision(asteroidCharge))
                         {
                             MusicEffects.HitSound();
-                            asteroidCharge.PowerLow(bullets[j].Power);  //Object "power" reduction
+                            asteroidCharge.PowerLow(bullet.Power);  //Object "power" reduction
+                            Bullet.DestroyingObject(bullet);
                             if (asteroidCharge.Power <= 0) //Procedure or destroyingobject (if power less then zero)
                             {
-                                asteroidCharge.DestroyingObject(asteroidCharge, ship);
+                                asteroidCharge.DestroyingObject(asteroidCharge);
                             }
-                            bullets.RemoveAt(j);
-                            j--; index--;
                         }
                     }
                     //Collision of object and ship
-                    if (ship.Collision(asteroidCharge))
+                    if (Ship.ship.Collision(asteroidCharge))
                     {
                         MusicEffects.HitSound();
                         asteroidCharge.Power = 0;
-                        ship.EnergyLow(asteroidCharge.Damage);
-                        ship.ScoreUp(10);
-                        asteroidCharge.DestroyingObject(asteroidCharge, ship);
+                        Ship.ship.EnergyLow(asteroidCharge.Damage);
+                        Ship.ship.ScoreUp(10);
+                        asteroidCharge.DestroyingObject(asteroidCharge);
                     }
                 }
             }
@@ -92,7 +106,7 @@ namespace FirstGame
         }
 
         //Loading Asteroid charge
-        static public void LoadAsteroidCharges(int posX, int posY, int sizeH, int n, bool isBossCharge=false)
+        static public void LoadAsteroidCharges(int posX, int posY, int posSizeWidth, int posSizeHeight, int n, bool isBossCharge=false)
         {
             for (int ich = -n; ich <= n; ich++)
             {
@@ -103,14 +117,14 @@ namespace FirstGame
                     if (isBossCharge)
                     {
                         asteroidCharges.Add(new AsteroidCharge(
-                            new Point(posX + sizeH / 2 + ich * sizeH / 4, posY + sizeH / 2 + jch * sizeH / 4),
-                            new Point(6 * ich + rnd.Next(-7, 7), 3 * jch + rnd.Next(-7, 7)), new Size(30, 30)));
+                            new Point(posX + posSizeWidth / 2 + ich * posSizeWidth / 4, posY + posSizeHeight / 2 + jch * posSizeHeight / 4),
+                            new Point(6 * ich + rnd.Next(-7, 7), 3 * jch + rnd.Next(-7, 7))));
                     }
                     else
                     {
                         asteroidCharges.Add(new AsteroidCharge(
-                            new Point(posX + sizeH / 2, posY + sizeH / 2),
-                            new Point(3 * ich, 3 * jch), new Size(sizeH / 4, sizeH / 4)));
+                            new Point(posX + posSizeWidth / 2, posY + posSizeHeight / 2),
+                            new Point(3 * ich, 3 * jch)));
                     }
                 }
             }
