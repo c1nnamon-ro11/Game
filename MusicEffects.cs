@@ -18,12 +18,14 @@ namespace FirstGame
         //Event of ending backsound
         private static void Media_Ended(object sender, EventArgs e)
         {
+            //Restart menu music if it ends
             if (menuMusic.NaturalDuration <= menuMusic.Position)
             {
                 menuMusic.Position = TimeSpan.Zero;
                 menuMusic.Play();
             }
 
+            //Restart game music if it ends
             if (gameMusic.NaturalDuration <= gameMusic.Position)
             {
                 gameMusic.Position = TimeSpan.Zero;
@@ -32,6 +34,7 @@ namespace FirstGame
         }
 
         //Sounds
+        //Game music starter
         static public void BackMusic()
         {
             menuMusic.Stop();
@@ -42,6 +45,7 @@ namespace FirstGame
             gameMusic.Play();
         }
 
+        //Boss sounds
         static public void BossFightMusic()
         {
             bossMusic.Open(new System.Uri("Content\\Sounds\\BossStart.mp3", UriKind.Relative));
@@ -49,6 +53,7 @@ namespace FirstGame
             bossMusic.Play();
         }
 
+        //Hit sounds
         static public void HitSound()
         {
             hitSound.Open(new System.Uri("Content\\Sounds\\Hit.mp3", UriKind.Relative));
@@ -56,6 +61,7 @@ namespace FirstGame
             hitSound.Play();
         }
 
+        //Shot sounds
         static public void ShotSound()
         {
             shotSound.Open(new System.Uri("Content\\Sounds\\Shot.mp3", UriKind.Relative));
@@ -63,6 +69,7 @@ namespace FirstGame
             shotSound.Play();
         }
 
+        //Boss shot sounds
         static public void BossShotSound()
         {
             bossShotSound.Open(new System.Uri("Content\\Sounds\\PowerShot.mp3", UriKind.Relative));
@@ -70,6 +77,7 @@ namespace FirstGame
             bossShotSound.Play();
         }
 
+        //Bonus sounds
         static public void BonusSound()
         {
             bonusSound.Open(new System.Uri("Content\\Sounds\\Bonus.mp3", UriKind.Relative));
@@ -77,7 +85,7 @@ namespace FirstGame
             bonusSound.Play();
         }
 
-        //Initialization sounds at GameFunctional
+        //Initialization game sounds
         static public void MusicInitialization()
         {
             menuMusic.Open(new System.Uri("Content\\Sounds\\EricSkiffUnderclocked.mp3", UriKind.Relative));
@@ -86,7 +94,7 @@ namespace FirstGame
             menuMusic.Play();
         }
 
-        //Initialization sounds at GameFunctional
+        //End game sounds
         static public void MusicStopMethod()
         {
             gameMusic.Stop();

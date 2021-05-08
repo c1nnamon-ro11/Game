@@ -6,14 +6,16 @@ namespace FirstGame
 {
     public class Bullet : Ship
     {
+        //Class spawn variables
         public static List<Bullet> bullets = new List<Bullet>();
         private static Random rnd = new Random();
         private bool isSuperBullet;
+
         //Images at screen
         Image defaultBullet = Image.FromFile("Content\\pictures\\bullet1.png");
         Image upgradeBullet = Image.FromFile("Content\\pictures\\bullet2.png");
 
-        //Overloading (because we have 2 types of bullets)
+        //Overloading (2 types of bullets)
         public override int Power
         {
             get { return power; }
@@ -56,11 +58,13 @@ namespace FirstGame
             pos.Y = pos.Y + dir.Y;
         }
 
+        //Procedure before removing game object from gamescreen
         public static void DestroyingObject(Bullet bullet)
         {
             bullet.Power = 0;
         }
 
+        //Functional logic of Ship bullets
         public static void Interaction()
         {
             foreach (var bullet in bullets)
@@ -81,11 +85,6 @@ namespace FirstGame
         public static void RemoveObjectFromCollection()
         {           
             bullets.RemoveAll(item => item.Power <= 0);         
-        }
-
-        public static void RemoveBullet(Bullet bullet)
-        {
-            bullet.Power = 0;
         }
 
         //Loading Bullets

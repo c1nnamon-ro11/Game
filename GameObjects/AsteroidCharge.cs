@@ -6,16 +6,20 @@ namespace FirstGame
 {
     class AsteroidCharge : BaseObject
     {
+        //Class spawn variables
         public static List<AsteroidCharge> asteroidCharges = new List<AsteroidCharge>();
         private static Random rnd = new Random();
 
         //Image at screen
         static Image img = Image.FromFile("Content\\pictures\\charge.png");
+
+        //Default object characteristics
         const int DEFAULT_POWER = 100;
         const int DEFAULT_DAMAGE = 15;
         readonly int DEFAULT_WIDTH = img.Width;
         readonly int DEFAULT_HEIGHT = img.Height;
 
+        //Constructors
         public AsteroidCharge(Point pos, Point dir) : base(pos, dir)
         {
             power = DEFAULT_POWER;
@@ -113,11 +117,11 @@ namespace FirstGame
         }
 
         //Loading Asteroid charge
-        static public void LoadAsteroidCharges(int posX, int posY, int posSizeWidth, int posSizeHeight, int n, bool isBossCharge=false)
+        static public void LoadAsteroidCharges(int posX, int posY, int posSizeWidth, int posSizeHeight, int koefOfNumber, bool isBossCharge=false)
         {
-            for (int ich = -n; ich <= n; ich++)
+            for (int ich = -koefOfNumber; ich <= koefOfNumber; ich++)
             {
-                for (int jch = -n; jch <= n; jch++)
+                for (int jch = -koefOfNumber; jch <= koefOfNumber; jch++)
                 {
                     if (ich == 0 && jch == 0) { continue; }
                     if (ich == 0 || jch == 0) { continue; }

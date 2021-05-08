@@ -6,11 +6,14 @@ namespace FirstGame
 {
     class Boss : BaseObject
     {
+        //Class spawn variables
         public static Boss boss;
-
         private static Random rnd = new Random();
+
         //Image at screen
         static Image img = Image.FromFile("Content\\pictures\\boss.png");
+
+        //Default object characteristics
         public const int DEFAULT_POWER = 500;
         public const int DEFAULT_DAMAGE = int.MaxValue;
         static readonly int DEFAULT_WIDTH = img.Width;
@@ -18,7 +21,7 @@ namespace FirstGame
 
         public bool ulta;
 
-        //Constructor
+        //Constructors
         public Boss(Point pos, Point dir) : base(pos, dir)
         {
             power = DEFAULT_POWER;
@@ -40,6 +43,7 @@ namespace FirstGame
         public Boss(Point pos, Point dir, Size size, int power, int damage) : base(pos, dir, size, power, damage)
         {
         }
+
         //Drawing at game screen
         override public void Drawing()
         {
@@ -59,6 +63,7 @@ namespace FirstGame
             if (pos.Y > GameFunctional.Height - WidthSize) dir.Y = -rnd.Next(2, 5);
         }
 
+        //Procedure before removing game object from gamescreen
         private void DestroyingObject(Boss boss)
         {
             GameFunctional.isBossFight = false;
@@ -78,6 +83,7 @@ namespace FirstGame
             }
         }
 
+        //Functional logic of Boss
         public static void Interaction()
         {
             //Boss
@@ -118,9 +124,9 @@ namespace FirstGame
         //Loading Boss
         static public void LoadObjects()
         {
-            boss = new Boss(new Point(GameFunctional.Width + rnd.Next(10, 100), GameFunctional.Height / 2),
-                    new Point(-3, 3),
-                    new Size(DEFAULT_WIDTH, DEFAULT_HEIGHT));
+            boss = new Boss(
+                new Point(GameFunctional.Width + rnd.Next(10, 100), GameFunctional.Height / 2),
+                new Point(-3, 3));
             GameFunctional.isBossFight = true;
             boss.ulta = true;
             Ship.ship.BossTime = 0;

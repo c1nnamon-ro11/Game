@@ -30,7 +30,7 @@ namespace FirstGame
         static Timer timer = new Timer();
         static Timer scoreTimer = new Timer();
         static Timer shotTimer = new Timer();
-        public static Timer bossShotTimer = new Timer();
+        static Timer bossShotTimer = new Timer();
         static Timer startGameMenu = new Timer();
 
         //Game fucntional consts
@@ -63,7 +63,7 @@ namespace FirstGame
         static public void Initialization(Form GameScreen)
         {
             MusicEffects.MusicInitialization();
-            Controler.ControlerInitialization();
+            Controller.ControlerInitialization();
 
             Graphics grx;
             context = BufferedGraphicsManager.Current;
@@ -77,7 +77,7 @@ namespace FirstGame
 
             //Events           
             Ship.MessageDie += Finish;                  //End Game
-            if (!Controler.IsControlerConnected)
+            if (!Controller.IsControlerConnected)
             {
                 GameScreen.KeyDown += GameScreen_KeyDown;   //Ship control
                 GameScreen.KeyUp += GameScreen_KeyUp;
@@ -166,7 +166,7 @@ namespace FirstGame
             //Automatic firing rate
             shotTimer.Interval = FIRING_RATE;
             shotTimer.Start();
-            if (Controler.IsAutoFire)
+            if (Controller.IsAutoFire)
             {
                 shotTimer.Tick += ShotTimer_Tick;
             }
@@ -303,14 +303,14 @@ namespace FirstGame
             //Static (non-interacting objects)
             buffer.Graphics.Clear(Color.Black);
             Background.BackGround();
-            if (Controler.IsControlerConnected)
+            if (Controller.IsControlerConnected)
             {
-                Controler.SerialPort.WriteLine(Ship.ship.Score.ToString());
-                Controler.controlerOperation(Ship.ship);
-                if (Controler.IsShot)
+                Controller.SerialPort.WriteLine(Ship.ship.Score.ToString());
+                Controller.controllerOperation(Ship.ship);
+                if (Controller.IsShot)
                 {
                     ShotTimer_Tick();
-                    Controler.IsShot = false;
+                    Controller.IsShot = false;
                 }
             }
 

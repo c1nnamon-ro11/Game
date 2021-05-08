@@ -6,16 +6,20 @@ namespace FirstGame
 {
     public class Star : BaseObject
     {
+        //Class spawn variables
         public static List<Star> stars = new List<Star>();
         private static Random rnd = new Random();
 
         //Image at screen
         static Image img = Image.FromFile("Content\\pictures\\star.png");
+
+        //Default object characteristics
         const int DEFAULT_POWER = 10;
         const int DEFAULT_DAMAGE = 10;
         readonly int DEFAULT_WIDTH = img.Width;
         readonly int DEFAULT_HEIGHT = img.Height;
 
+        //Constructors
         public Star(Point pos, Point dir) : base(pos, dir)
         {
             power = DEFAULT_POWER;
@@ -59,6 +63,7 @@ namespace FirstGame
             if (pos.Y + HeightSize > GameFunctional.Height) dir.Y = -dir.Y;
         }
 
+        //Procedure before removing game object from gamescreen
         public void DestroyingObject(Star star)
         {
             VisualEffect.LoadObjects(
@@ -70,6 +75,7 @@ namespace FirstGame
             }
         }
 
+        //Functional logic of Rocket
         public static void Interaction()
         {
             foreach (var star in stars)
@@ -117,10 +123,8 @@ namespace FirstGame
             {
                 int speedX = rnd.Next(5, 7);
                 int speedY = rnd.Next(7, 10);
-                int size = 25;
                 stars.Add(new Star(
-                    new Point(
-                        GameFunctional.Width + rnd.Next(1, 100) * 10, rnd.Next(0, GameFunctional.Height)),
+                    new Point(GameFunctional.Width + rnd.Next(1, 100) * 10, rnd.Next(0, GameFunctional.Height)),
                     new Point(-speedX, speedY)));
             }
         }

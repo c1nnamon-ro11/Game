@@ -4,11 +4,13 @@ namespace FirstGame
 {
     public class Ship : BaseObject
     {
-
+        //Class spawn variables
         public static Ship ship = new Ship(new Point(30, 450), new Point(3, 3), new Size(DEFAULT_WIDTH, DEFAULT_HEIGHT));
 
         //Image at screen
         static Image img = Image.FromFile("Content\\pictures\\ship.png");
+
+        //Default object characteristics
         static readonly int DEFAULT_WIDTH = img.Width;
         static readonly int DEFAULT_HEIGHT = img.Height;
 
@@ -38,26 +40,26 @@ namespace FirstGame
         }
 
         //Methods for caltulating the characterics of game ship
-        public void BossTimeUp(int n)
+        public void BossTimeUp(int number)
         {
-            bossTime += n;
+            bossTime += number;
         }
         public int Lvl
         {
             set { lvl = value; }
             get { return lvl; }
         }
-        public void ScoreUp(int n)
+        public void ScoreUp(int number)
         {
-            score += n;
+            score += number;
         }
-        public void EnergyLow(int n)
+        public void EnergyLow(int number)
         {
-            energy­ -= n;
+            energy­ -= number;
         }
-        public void LvlUp(int n)
+        public void LvlUp(int number)
         {
-            Lvl += n;
+            Lvl += number;
             if (Lvl == 0) Lvl = 1;
             if (Lvl == 7)
             {

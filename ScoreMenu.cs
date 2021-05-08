@@ -10,12 +10,14 @@ namespace FirstGame
 {
     public class ScoreMenu : Form
     {
-
+        //Window`s elements
         Label lblName;
         Label lblScore;
         Label lblUserScore;
         TextBox nameBox;
         Button btn_OK;
+
+        //Properties
         public int Score { get; set; }
         public string PlayerName { get; set; }
 
@@ -65,6 +67,7 @@ namespace FirstGame
         //"Rewriting" sroreboard
         private void ScoreBoard()
         {
+            //Reading results table
             int i = 1;
             string fileLine;
             List<string> users= new List<string>();
@@ -76,6 +79,7 @@ namespace FirstGame
             }
             sr.Close();
 
+            //"Rewriting" results at the same file
             Dictionary<string,int> scoreList = ScoreSort(users);
             StreamWriter sw = new StreamWriter("Content\\Scoreboard\\ScoreBoard.txt", false);
             foreach(var user in scoreList)
@@ -89,31 +93,32 @@ namespace FirstGame
         //Sorting records
         private Dictionary<string,int> ScoreSort(List<string> users)
         {
+            //Adding all results to local variable
             Dictionary<string, int> result = new Dictionary<string, int>();
             result.Add(PlayerName, Score);
 
             foreach (var user in users)
             {
+                //Getting pair name-result
                 int space = user.IndexOf(' ');
                 string name = user.Substring(0, space);
                 int value = int.Parse(user.Substring(space));
 
+                //Checking if table already have result with this nickname
                 if (result.ContainsKey(name))
                 {
+                    //"Rewriting" result of player with this nickname if new result bigger
                     if (result[name] < value) result[name] = value;
                 }
+                //Adding new player with result
                 else { result[name] = value; }
             }
 
+            //Sorting new results
             result = result.OrderByDescending(x => x.Value).ToDictionary(pair => pair.Key, pair => pair.Value);
             return result;
         }
 
-        //
-        public void callFinishMenu()
-        {
-
-        }
         //Exit
         private void Btn_OK_Click(object sender, EventArgs e)
         {

@@ -9,12 +9,12 @@ namespace FirstGame
             //Initialization and game size
             //WindowsBase.dll and PresentationCore.dll
             Form GameScreen = new Form();
-            GameScreen.WindowState = FormWindowState.Maximized;
-
-            //GameScreen.Width = 1920;
-            //GameScreen.Height = 1440;           
+            //Full screen
+            GameScreen.WindowState = FormWindowState.Maximized;           
             GameFunctional.Initialization(GameScreen);
+            //Screen`s name
             GameScreen.Text = "Asteroid Belt";
+
             GameScreen.Show();
             GameFunctional.Drawing();
             Application.Run(GameScreen);

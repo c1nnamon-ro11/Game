@@ -54,7 +54,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Background.cs" />
-    <Compile Include="Controler.cs" />
+    <Compile Include="Controller.cs" />
     <Compile Include="GameObjects\Asteroid.cs" />
     <Compile Include="GameObjects\AsteroidCharge.cs" />
     <Compile Include="GameObjects\BonusUp.cs" />

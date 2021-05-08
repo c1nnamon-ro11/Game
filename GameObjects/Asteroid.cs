@@ -6,16 +6,20 @@ namespace FirstGame
 {
     class Asteroid : BaseObject
     {
+        //Class spawn variables
         public static List<Asteroid> asteroids = new List<Asteroid>();
         private static Random rnd = new Random();
 
         //Image at screen
         static Image img = Image.FromFile("Content\\pictures\\asteroid.png");
+
+        //Default object characteristics
         const int DEFAULT_POWER = 100;
         const int DEFAULT_DAMAGE = 15;
         readonly int DEFAULT_WIDTH = img.Width;
         readonly int DEFAULT_HEIGHT = img.Height;
 
+        //Constructors
         public Asteroid(Point pos, Point dir) : base(pos, dir)
         {
             power = DEFAULT_POWER;
@@ -89,7 +93,7 @@ namespace FirstGame
                             MusicEffects.HitSound();
                             asteroid.PowerLow(bullet.Power);    //Object "power" reduction
                             Bullet.DestroyingObject(bullet);
-                            if (asteroid.Power <= 0)    //Procedure or destroyingobject (if power less then zero)
+                            if (asteroid.Power <= 0)    //Procedure or destroying object (if power less then zero)
                             {
                                 asteroid.DestroyingObject(asteroid);
                             }

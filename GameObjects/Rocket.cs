@@ -6,16 +6,20 @@ namespace FirstGame
 {
     class Rocket : BaseObject
     {
+        //Class spawn variables
         public static List<Rocket> rockets = new List<Rocket>();
         private static Random rnd = new Random();
 
         //Image at screen
         static Image img = Image.FromFile("Content\\pictures\\rocket.png");
+
+        //Default object characteristics
         const int DEFAULT_POWER = 10;
         const int DEFAULT_DAMAGE = 10;
         readonly int DEFAULT_WIDTH = img.Width;
         readonly int DEFAULT_HEIGHT = img.Height;
 
+        //Constructors
         public Rocket(Point pos, Point dir) : base(pos, dir)
         {
             power = DEFAULT_POWER;
@@ -57,6 +61,7 @@ namespace FirstGame
             }
         }
 
+        //Procedure before removing game object from gamescreen
         public void DestroyingObject(Rocket rocket)
         {
             VisualEffect.LoadObjects(
@@ -68,6 +73,7 @@ namespace FirstGame
             }
         }
 
+        //Functional logic of Rocket
         public static void Interaction()
         {
             foreach (var rocket in rockets)
@@ -115,8 +121,7 @@ namespace FirstGame
             {
                 int r = rnd.Next(10, 15);
                 rockets.Add(new Rocket(
-                    new Point(
-                        GameFunctional.Width + rnd.Next(1, 100) * 10, rnd.Next(0, GameFunctional.Height)),
+                    new Point(GameFunctional.Width + rnd.Next(1, 100) * 10, rnd.Next(0, GameFunctional.Height)),
                     new Point(-r, r)));
             }
         }

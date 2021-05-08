@@ -2,43 +2,45 @@
 
 namespace FirstGame
 {
-    public static class Controler
+    //Controller connection
+    public static class Controller
     {
+        //Controller`s variables
         static SerialPort serialPort;
         static bool isControlerConnected;
         static bool isAutoFire = true;
         static bool isShot;
 
+        //Properties
         public static SerialPort SerialPort
         {
             get { return serialPort; }
             set { serialPort = value; }
         }
-
         public static bool IsControlerConnected
         {
             get { return isControlerConnected; }
             set { isControlerConnected = value; }
         }
-
         public static bool IsAutoFire
         {
             get { return isAutoFire; }
             set { isAutoFire = value; }
         }
-
         public static bool IsShot
         {
             get { return isShot; }
             set { isShot = value; }
         }
 
+        //Initialization of controller stats
         public static void ControlerInitialization()
         {
-            //Arduino
+            //Controller`s stats
             serialPort = new SerialPort();
             serialPort.PortName = "COM4";
             serialPort.BaudRate = 19200;
+            //attempt to connect controller to PC
             try
             {
                 serialPort.Open();
@@ -48,31 +50,40 @@ namespace FirstGame
             {
                 isControlerConnected = false;
             }
+            //Abolition of autofire if game controller connected
             if (isControlerConnected)
             {
                 isAutoFire = false;
             }
         }
 
-        public static void controlerSend(string message)
+        //Sending message (score) to controller to diplay
+        public static void controllerSend(string message)
         {
             serialPort.WriteLine(message);
         }
         
-        public static void controlerCleaner()
+        //Read first bite from controller to clean port before recieving information
+        public static void controllerCleaner()
         {
             serialPort.ReadExisting();
         }
 
-        public static string controlerRecieve()
+        //Recieving information from contoller
+        public static string controllerRecieve()
         {
             return serialPort.ReadLine();
         }
 
-        public static void controlerOperation(Ship ship)
+        //Calculating Ship option, recieved from controller
+        public static void controllerOperation(Ship ship)
         {
-            controlerCleaner();
-            switch (controlerRecieve())
+            controllerCleaner();
+            //Operations
+            //1-8 - moving
+            //9 - shot
+            //other - nothing
+            switch (controllerRecieve())
             {
                 case "1\r":
                     GameFunctional.GameStart();

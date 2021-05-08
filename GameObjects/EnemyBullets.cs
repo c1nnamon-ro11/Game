@@ -6,15 +6,20 @@ namespace FirstGame
 {
     class EnemyBullets : BaseObject
     {
+        //Class spawn variables
         public static List<EnemyBullets> enemyBullets = new List<EnemyBullets>();
         private static Random rnd = new Random();
+
         //Image at screen
         static Image img = Image.FromFile("Content\\pictures\\fireball2.png");
+
+        //Default object characteristics
         const int DEFAULT_POWER = 100;
         const int DEFAULT_DAMAGE = 15;
         readonly int DEFAULT_WIDTH = img.Width;
         readonly int DEFAULT_HEIGHT = img.Height;
 
+        //Constructors
         public EnemyBullets(Point pos, Point dir) : base(pos, dir)
         {
             power = DEFAULT_POWER;
@@ -51,12 +56,14 @@ namespace FirstGame
             pos.Y = pos.Y + dir.Y;
         }
 
+        //Procedure before removing game object from gamescreen
         private void DestroyingObject(EnemyBullets enemyBullet)
         {
             VisualEffect.LoadObjects(
                             enemyBullet.PosX + enemyBullet.WidthSize / 2, enemyBullet.PosY + enemyBullet.HeightSize / 2, 2); //Spawn in place of the object of "visual effects
         }
 
+        //Functional logic of EnemyBullets
         public static void Interaction()
         {
             foreach (var enemyBullet in enemyBullets)
@@ -85,7 +92,7 @@ namespace FirstGame
                 item => (item.PosX > GameFunctional.Width || item.PosX < 0 || item.PosY > GameFunctional.Height || item.PosY <0));
         }
 
-        //Loading Stars
+        //Loading EnemyBullets
         static public void LoadObjects(int posX, int posY, int posSizeWidth, int posSizeHeigth, int numberOfBullets)
         {       
             for (int ich = -numberOfBullets; ich <= numberOfBullets; ich++)

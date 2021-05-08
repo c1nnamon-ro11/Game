@@ -11,6 +11,7 @@ namespace FirstGame
             GameFunctional.buffer.Graphics.DrawImage
                 (Image.FromFile("Content\\pictures\\planet.png"), new Rectangle(1000, 100, 100, 100));
 
+            //"Star`s effect"
             Random rnd = new Random();
             int Num = rnd.Next(10, 100);
             int[] coorX = new int[Num];
@@ -23,6 +24,19 @@ namespace FirstGame
             }
         }
 
+        //Display game info at top of the gamescreen
+        static public void DisplayOutputGameInformation(BufferedGraphics buffer, Ship ship, int counter)
+        {
+            buffer.Graphics.DrawString("Energy:" + ship.Energy, SystemFonts.DefaultFont,
+            Brushes.White, 0, 0);
+            buffer.Graphics.DrawString("Score:" + ship.Score, SystemFonts.DefaultFont,
+            Brushes.White, 100, 0);
+            buffer.Graphics.DrawString("Number of shots:" + counter, SystemFonts.DefaultFont,
+            Brushes.White, 200, 0);
+            buffer.Render();
+        }
+
+        //Display information after game end
         static public void DisplayFinishGameStats(BufferedGraphics buffer)
         {
             buffer.Graphics.DrawString(
@@ -32,19 +46,6 @@ namespace FirstGame
                 "Your score:" + Ship.ship.Score, new Font(FontFamily.GenericSansSerif, 30),
                 Brushes.Bisque, GameFunctional.Width / 2 - 180, GameFunctional.Height / 2);
             buffer.Render();
-        }
-
-        static public void DisplayOutputGameInformation(BufferedGraphics buffer, Ship ship, int counter)
-        {
-            buffer.Graphics.DrawString("Energy:" + ship.Energy, SystemFonts.DefaultFont,
-            Brushes.White, 0, 0);
-            buffer.Graphics.DrawString("Score:" + ship.Score, SystemFonts.DefaultFont,
-            Brushes.White, 100, 0);
-            buffer.Graphics.DrawString("Number of shots:" + counter, SystemFonts.DefaultFont,
-            Brushes.White, 200, 0);
-            buffer.Graphics.DrawString("Ship LVL:" + Ship.ship.Lvl, SystemFonts.DefaultFont,
-            Brushes.White, 400, 0);
-            buffer.Render();
-        }
+        }        
     }
 }

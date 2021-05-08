@@ -6,16 +6,19 @@ namespace FirstGame
 {
     class BonusUp : BaseObject
     {
+        //Class spawn variables
         public static List<BonusUp> bonusUp = new List<BonusUp>();
         private static Random rnd = new Random();
 
         //Image at screen
         static Image img = Image.FromFile("Content\\pictures\\bonus.png");
+
+        //Default object characteristics
         const int DEFAULT_POWER = 10;
         readonly int DEFAULT_WIDTH = img.Width;
         readonly int DEFAULT_HEIGHT = img.Height;
 
-        //Constructor
+        //Constructors
         public BonusUp(Point pos, Point dir) : base(pos, dir)
         {
             power = DEFAULT_POWER;
@@ -42,6 +45,7 @@ namespace FirstGame
             GameFunctional.buffer.Graphics.DrawImage
                 (img, pos);
         }
+
         //Calculating new position of object
         override public void Update()
         {
@@ -51,6 +55,7 @@ namespace FirstGame
             if (pos.Y + WidthSize > GameFunctional.Height) dir.Y = -dir.Y;
         }
 
+        //Procedure before removing game object from gamescreen
         private void DestroyingObject(BonusUp bonus)
         {
             Ship.ship.ScoreUp(0);
@@ -60,6 +65,7 @@ namespace FirstGame
             }
         }
 
+        //Functional logic of BonusUp
         public static void Interaction()
         {
             foreach (var bonus in bonusUp)
@@ -95,11 +101,8 @@ namespace FirstGame
         {
             int speedX = rnd.Next(2, 3);
             int speedY = rnd.Next(2, 3);
-            int sizeX = 45;
-            int sizeY = 25;
             bonusUp.Add(new BonusUp(
-                new Point(
-                    GameFunctional.Width + rnd.Next(0, 400), GameFunctional.Height / 2 + rnd.Next(-400, 400)),
+                new Point(GameFunctional.Width + rnd.Next(0, 400), GameFunctional.Height / 2 + rnd.Next(-400, 400)),
                 new Point(-speedX, speedY)));
         }
     }

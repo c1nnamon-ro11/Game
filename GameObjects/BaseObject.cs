@@ -2,6 +2,7 @@
 
 namespace FirstGame
 {
+    //Delagate for EndGame
     public delegate void Message();
 
     //Interface collision
@@ -11,6 +12,7 @@ namespace FirstGame
         Rectangle Rect { get; }
     }
 
+    //Base class of objects (Abstract fabric)
     public abstract class BaseObject:ICollision
     {
         //Protected fields 
@@ -21,7 +23,7 @@ namespace FirstGame
         protected int damage; //objetr "damage"
         protected Image img; //object image
 
-        //Constructor
+        //Constructors
         public BaseObject(Point pos, Point dir)
         {
             this.pos = pos;
@@ -90,14 +92,14 @@ namespace FirstGame
         }
 
         //Methods
-        public void PowerLow(int n)
-        {
-            { power­ -= n; }
-        }
-
         abstract public void Drawing();
 
         abstract public void Update();
+
+        public void PowerLow(int damage)
+        {
+            { power­ -= damage; }
+        }
 
         public bool Collision(ICollision o)
         {

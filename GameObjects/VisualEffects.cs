@@ -6,10 +6,30 @@ namespace FirstGame
 {
     public class VisualEffect : BaseObject
     {
+        //Class spawn variables
         public static List<VisualEffect> visualEffects = new List<VisualEffect>();
         private static Random rnd = new Random();
-        //Constructor
+
+        //Default object characteristics
+        readonly int DEFAULT_WIDTH = 5;
+        readonly int DEFAULT_HEIGHT = 5;
+
+        //Constructors
+        public VisualEffect(Point pos, Point dir) : base(pos, dir)
+        {
+            size = new Size(DEFAULT_WIDTH, DEFAULT_HEIGHT);
+        }
+
         public VisualEffect(Point pos, Point dir, Size size) : base(pos, dir, size)
+        {
+        }
+
+        public VisualEffect(Point pos, Point dir, int power, int damage) : base(pos, dir, power, damage)
+        {
+            size = new Size(DEFAULT_WIDTH, DEFAULT_HEIGHT);
+        }
+
+        public VisualEffect(Point pos, Point dir, Size size, int power, int damage) : base(pos, dir, size, power, damage)
         {
         }
 
@@ -33,10 +53,12 @@ namespace FirstGame
             }
         }
 
+        //Procedure before removing game object from gamescreen
         public void DestroyingObject()
         {
         }
 
+        //Functional logic of Rocket
         public static void Interaction()
         {
             foreach (var visualEffect in visualEffects)
@@ -63,7 +85,7 @@ namespace FirstGame
                     if (ich == 0 && jch == 0) { continue; }
                     visualEffects.Add(new VisualEffect(
                         new Point(posX, posY),
-                        new Point(3 * ich + rnd.Next(-7, 7), 3 * jch + rnd.Next(-7, 7)), new Size(5, 5)));
+                        new Point(3 * ich + rnd.Next(-7, 7), 3 * jch + rnd.Next(-7, 7))));
                 }
             }
         }
