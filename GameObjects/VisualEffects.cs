@@ -9,6 +9,7 @@ namespace FirstGame
         //Class spawn variables
         public static List<VisualEffect> visualEffects = new List<VisualEffect>();
         private static Random rnd = new Random();
+        private bool isColorEffect;
 
         //Default object characteristics
         readonly int DEFAULT_WIDTH = 5;
@@ -23,6 +24,11 @@ namespace FirstGame
         public VisualEffect(Point pos, Point dir, Size size) : base(pos, dir, size)
         {
         }
+        public VisualEffect(Point pos, Point dir, bool isDifferentColor) : base(pos, dir)
+        {
+            size = new Size(DEFAULT_WIDTH, DEFAULT_HEIGHT);
+            isColorEffect = isDifferentColor;
+        }
 
         public VisualEffect(Point pos, Point dir, int power, int damage) : base(pos, dir, power, damage)
         {
@@ -36,8 +42,11 @@ namespace FirstGame
         //Drawing at game screen
         public override void Drawing()
         {
-            GameFunctional.buffer.Graphics.FillEllipse(
-                Brushes.Aquamarine, pos.X, pos.Y, size.Width, size.Height);
+            if (isColorEffect)
+            {
+                GameFunctional.buffer.Graphics.FillEllipse(Brushes.Gold, pos.X, pos.Y, WidthSize, HeightSize);
+            }
+            else GameFunctional.buffer.Graphics.FillEllipse(Brushes.Aquamarine, pos.X, pos.Y, WidthSize, HeightSize);
         }
 
         //Calculating new position of object
@@ -76,7 +85,7 @@ namespace FirstGame
         }
 
         //Loading Rocket
-        static public void LoadObjects(int posX, int posY, int numberOfObject)
+        static public void LoadObjects(int posX, int posY, int numberOfObject, bool isDifferentColor = false)
         {
             for (int ich = -numberOfObject; ich <= numberOfObject; ich++)
             {
@@ -85,7 +94,8 @@ namespace FirstGame
                     if (ich == 0 && jch == 0) { continue; }
                     visualEffects.Add(new VisualEffect(
                         new Point(posX, posY),
-                        new Point(3 * ich + rnd.Next(-7, 7), 3 * jch + rnd.Next(-7, 7))));
+                        new Point(3 * ich + rnd.Next(-7, 7), 3 * jch + rnd.Next(-7, 7)),
+                        isDifferentColor));
                 }
             }
         }

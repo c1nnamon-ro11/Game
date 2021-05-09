@@ -3,16 +3,16 @@
 namespace FirstGame
 {
     public class Ship : BaseObject
-    {
-        //Class spawn variables
-        public static Ship ship = new Ship(new Point(30, 450), new Point(3, 3), new Size(DEFAULT_WIDTH, DEFAULT_HEIGHT));
-
+    {        
         //Image at screen
-        static Image img = Image.FromFile("Content\\pictures\\ship.png");
+        static Image img = Image.FromFile(GameFunctional.texturePackPath + "ship.png");
 
         //Default object characteristics
         static readonly int DEFAULT_WIDTH = img.Width;
         static readonly int DEFAULT_HEIGHT = img.Height;
+
+        //Class spawn variables
+        public static Ship ship = new Ship(new Point(30, 450), new Point(3, 3), new Size(DEFAULT_WIDTH, DEFAULT_HEIGHT));
 
         //Fields and events of class
         public static event Message MessageDie; //Death 
@@ -116,6 +116,16 @@ namespace FirstGame
         public void Die()
         {
             if (MessageDie != null) MessageDie();
+        }
+
+        //Procedure before removing game object from gamescreen
+        static public void DestroyingObject()
+        {
+            VisualEffect.LoadObjects(ship.PosX + ship.WidthSize / 2, ship.PosY + ship.HeightSize / 2, 5, true);
+            ship.PosX = GameFunctional.Width * 5;
+            ship.PosX = GameFunctional.Height * 5;
+            MusicEffects.MusicStopMethod();
+            ship.Energy = 0;
         }
     }
 }

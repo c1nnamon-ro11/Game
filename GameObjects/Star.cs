@@ -11,7 +11,7 @@ namespace FirstGame
         private static Random rnd = new Random();
 
         //Image at screen
-        static Image img = Image.FromFile("Content\\pictures\\star.png");
+        static Image img = Image.FromFile(GameFunctional.texturePackPath + "star.png");
 
         //Default object characteristics
         const int DEFAULT_POWER = 10;

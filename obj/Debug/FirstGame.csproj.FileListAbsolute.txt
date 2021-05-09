@@ -158,11 +158,8 @@ C:\Users\USER\Desktop\Projects\Game\FirstGame — 31.08\bin\Debug\Content\Sounds
 C:\Users\USER\Desktop\Projects\Game\FirstGame — 31.08\bin\Debug\Content\Sounds\PowerShot.mp3
 C:\Users\USER\Desktop\Projects\Game\FirstGame — 31.08\bin\Debug\Content\Sounds\Shot.mp3
 C:\Users\USER\Desktop\Projects\Game\FirstGame — 31.08\bin\Debug\Content\Scoreboard\Scoreboard.txt
-C:\Users\USER\Desktop\Projects\Asteroid Belt\FirstGame — 31.08\bin\Debug\Content\pictures\asteroid.png
 C:\Users\USER\Desktop\Projects\Asteroid Belt\FirstGame — 31.08\bin\Debug\Content\pictures\bonus.png
 C:\Users\USER\Desktop\Projects\Asteroid Belt\FirstGame — 31.08\bin\Debug\Content\pictures\bullet2.png
-C:\Users\USER\Desktop\Projects\Asteroid Belt\FirstGame — 31.08\bin\Debug\Content\pictures\charge.png
-C:\Users\USER\Desktop\Projects\Asteroid Belt\FirstGame — 31.08\bin\Debug\Content\pictures\fireball2.png
 C:\Users\USER\Desktop\Projects\Asteroid Belt\FirstGame — 31.08\bin\Debug\Content\pictures\bullet1.png
 C:\Users\USER\Desktop\Projects\Asteroid Belt\FirstGame — 31.08\bin\Debug\Content\pictures\boss.png
 C:\Users\USER\Desktop\Projects\Asteroid Belt\FirstGame — 31.08\bin\Debug\Content\pictures\planet.png
@@ -191,3 +188,29 @@ C:\Users\USER\Desktop\Projects\Asteroid Belt\FirstGame — 31.08\obj\Debug\First
 C:\Users\USER\Desktop\Projects\Asteroid Belt\FirstGame — 31.08\obj\Debug\FirstGame.csproj.CoreCompileInputs.cache
 C:\Users\USER\Desktop\Projects\Asteroid Belt\FirstGame — 31.08\obj\Debug\FirstGame.exe
 C:\Users\USER\Desktop\Projects\Asteroid Belt\FirstGame — 31.08\obj\Debug\FirstGame.pdb
+C:\Users\USER\Desktop\Projects\Asteroid Belt\FirstGame — 31.08\bin\Debug\Content\pictures\enemyBullet.png
+C:\Users\USER\Desktop\Projects\Asteroid Belt\FirstGame — 31.08\bin\Debug\Content\TexturePack - Galaxy Highways\bonus.png
+C:\Users\USER\Desktop\Projects\Asteroid Belt\FirstGame — 31.08\bin\Debug\Content\TexturePack - Galaxy Highways\ship.png
+C:\Users\USER\Desktop\Projects\Asteroid Belt\FirstGame — 31.08\bin\Debug\Content\TexturePack - Galaxy Highways\enemyBullet.png
+C:\Users\USER\Desktop\Projects\Asteroid Belt\FirstGame — 31.08\bin\Debug\Content\TexturePack - Galaxy Highways\object2.png
+C:\Users\USER\Desktop\Projects\Asteroid Belt\FirstGame — 31.08\bin\Debug\Content\TexturePack - Galaxy Highways\star.png
+C:\Users\USER\Desktop\Projects\Asteroid Belt\FirstGame — 31.08\bin\Debug\Content\TexturePack - Galaxy Highways\rocket.png
+C:\Users\USER\Desktop\Projects\Asteroid Belt\FirstGame — 31.08\bin\Debug\Content\TexturePack - Galaxy Highways\rocketV2.png
+C:\Users\USER\Desktop\Projects\Asteroid Belt\FirstGame — 31.08\bin\Debug\Content\TexturePack - Galaxy Highways\boss.png
+C:\Users\USER\Desktop\Projects\Asteroid Belt\FirstGame — 31.08\bin\Debug\Content\pictures\asteroid\asteroid4.png
+C:\Users\USER\Desktop\Projects\Asteroid Belt\FirstGame — 31.08\bin\Debug\Content\pictures\asteroid\asteroid3.png
+C:\Users\USER\Desktop\Projects\Asteroid Belt\FirstGame — 31.08\bin\Debug\Content\pictures\asteroid\asteroid2.png
+C:\Users\USER\Desktop\Projects\Asteroid Belt\FirstGame — 31.08\bin\Debug\Content\pictures\asteroid\asteroid1.png
+C:\Users\USER\Desktop\Projects\Asteroid Belt\FirstGame — 31.08\bin\Debug\Content\pictures\asteroidCharge\asteroidCharge3.png
+C:\Users\USER\Desktop\Projects\Asteroid Belt\FirstGame — 31.08\bin\Debug\Content\pictures\asteroidCharge\asteroidCharge2.png
+C:\Users\USER\Desktop\Projects\Asteroid Belt\FirstGame — 31.08\bin\Debug\Content\pictures\asteroidCharge\asteroidCharge1.png
+C:\Users\USER\Desktop\Projects\Asteroid Belt\FirstGame — 31.08\bin\Debug\Content\TexturePack - Galaxy Highways\asteroidCharge\asteroidCharge2.png
+C:\Users\USER\Desktop\Projects\Asteroid Belt\FirstGame — 31.08\bin\Debug\Content\TexturePack - Galaxy Highways\asteroidCharge\asteroidCharge3.png
+C:\Users\USER\Desktop\Projects\Asteroid Belt\FirstGame — 31.08\bin\Debug\Content\TexturePack - Galaxy Highways\asteroidCharge\asteroidCharge1.png
+C:\Users\USER\Desktop\Projects\Asteroid Belt\FirstGame — 31.08\bin\Debug\Content\TexturePack - Galaxy Highways\asteroid\asteroid1.png
+C:\Users\USER\Desktop\Projects\Asteroid Belt\FirstGame — 31.08\bin\Debug\Content\TexturePack - Galaxy Highways\asteroid\asteroid2.png
+C:\Users\USER\Desktop\Projects\Asteroid Belt\FirstGame — 31.08\bin\Debug\Content\TexturePack - Galaxy Highways\asteroid\asteroid3.png
+C:\Users\USER\Desktop\Projects\Asteroid Belt\FirstGame — 31.08\bin\Debug\Content\TexturePack - Galaxy Highways\asteroid\asteroid4.png
+C:\Users\USER\Desktop\Projects\Asteroid Belt\FirstGame — 31.08\bin\Debug\Content\Pictures\rocketV2.png
+C:\Users\USER\Desktop\Projects\Asteroid Belt\FirstGame — 31.08\bin\Debug\Content\TexturePack - Galaxy Highways\bullet1.png
+C:\Users\USER\Desktop\Projects\Asteroid Belt\FirstGame — 31.08\bin\Debug\Content\TexturePack - Galaxy Highways\bullet2.png

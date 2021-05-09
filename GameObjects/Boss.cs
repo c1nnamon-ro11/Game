@@ -11,15 +11,16 @@ namespace FirstGame
         private static Random rnd = new Random();
 
         //Image at screen
-        static Image img = Image.FromFile("Content\\pictures\\boss.png");
+        static Image img = Image.FromFile(GameFunctional.texturePackPath + "boss.png");
 
         //Default object characteristics
-        public const int DEFAULT_POWER = 500;
+        public const int DEFAULT_POWER = 300;
         public const int DEFAULT_DAMAGE = int.MaxValue;
         static readonly int DEFAULT_WIDTH = img.Width;
         static readonly int DEFAULT_HEIGHT = img.Height;
 
         public bool ulta;
+        private double multiplier = 2.0/3;
 
         //Constructors
         public Boss(Point pos, Point dir) : base(pos, dir)
@@ -32,7 +33,7 @@ namespace FirstGame
         public Boss(Point pos, Point dir, Size size) : base(pos, dir, size)
         {
             power = DEFAULT_POWER;
-            damage = DEFAULT_DAMAGE;
+            damage = DEFAULT_DAMAGE;            
         }
 
         public Boss(Point pos, Point dir, int power, int damage) : base(pos, dir, power, damage)
@@ -69,8 +70,8 @@ namespace FirstGame
             GameFunctional.isBossFight = false;
             VisualEffect.LoadObjects(
                             boss.PosX + boss.WidthSize / 2, boss.PosY + boss.HeightSize / 2, 5);  //Spawn in place of the object of "visual effects
-            Ship.ship.ScoreUp(5000);
-            GameFunctional.bonusTime += 25;
+            Ship.ship.ScoreUp(DEFAULT_POWER);
+            GameFunctional.bonusTime += 1;
             GameFunctional.Load();
         }
 
@@ -102,6 +103,11 @@ namespace FirstGame
                             Bullet.DestroyingObject(bullet);
                             //Spawn in boss place charges
                             AsteroidCharge.LoadAsteroidCharges(boss.PosX, boss.PosY, boss.WidthSize, boss.HeightSize, 1, true);
+                            if(boss.Power < DEFAULT_POWER * boss.multiplier)
+                            {
+                                boss.ulta = true;
+                                boss.multiplier /= 2;
+                            }
                             //Boss destoring procedure
                             if (boss.Power <= 0)
                             {
@@ -128,7 +134,6 @@ namespace FirstGame
                 new Point(GameFunctional.Width + rnd.Next(10, 100), GameFunctional.Height / 2),
                 new Point(-3, 3));
             GameFunctional.isBossFight = true;
-            boss.ulta = true;
             Ship.ship.BossTime = 0;
         }
     }

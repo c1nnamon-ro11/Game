@@ -11,20 +11,18 @@ namespace FirstGame
         private static Random rnd = new Random();
 
         //Image at screen
-        static Image img = Image.FromFile("Content\\pictures\\charge.png");
+        Image asteroidChargeImg = ChooseObjectSkin();
 
         //Default object characteristics
         const int DEFAULT_POWER = 100;
         const int DEFAULT_DAMAGE = 15;
-        readonly int DEFAULT_WIDTH = img.Width;
-        readonly int DEFAULT_HEIGHT = img.Height;
 
         //Constructors
         public AsteroidCharge(Point pos, Point dir) : base(pos, dir)
         {
             power = DEFAULT_POWER;
             damage = DEFAULT_DAMAGE;
-            size = new Size(DEFAULT_WIDTH, DEFAULT_HEIGHT);
+            size = new Size(asteroidChargeImg.Width, asteroidChargeImg.Height);
         }
 
         public AsteroidCharge(Point pos, Point dir, Size size) : base(pos, dir, size)
@@ -35,18 +33,34 @@ namespace FirstGame
 
         public AsteroidCharge(Point pos, Point dir, int power, int damage) : base(pos, dir, power, damage)
         {
-            size = new Size(DEFAULT_WIDTH, DEFAULT_HEIGHT);
+            size = new Size(asteroidChargeImg.Width, asteroidChargeImg.Height);
         }
 
         public AsteroidCharge(Point pos, Point dir, Size size, int power, int damage) : base(pos, dir, size, power, damage)
         {
         }
 
+        //Choosing random skin for current object
+        static private Image ChooseObjectSkin()
+        {
+            switch (rnd.Next(1, 4))
+            {
+                case 1:
+                    return Image.FromFile(GameFunctional.texturePackPath + "asteroidCharge\\asteroidCharge1.png");
+                case 2:
+                    return Image.FromFile(GameFunctional.texturePackPath + "asteroidCharge\\asteroidCharge2.png");
+                case 3:
+                    return Image.FromFile(GameFunctional.texturePackPath + "asteroidCharge\\asteroidCharge3.png");
+                default:
+                    return Image.FromFile(GameFunctional.texturePackPath + "asteroidCharge\\asteroidCharge1.png");
+            }
+        }
+
         //Drawing at game screen
         public override void Drawing()
         {
             GameFunctional.buffer.Graphics.DrawImage
-                (img, pos);
+                (asteroidChargeImg, pos);
         }
 
         //Calculating new position of object

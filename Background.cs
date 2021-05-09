@@ -41,10 +41,10 @@ namespace FirstGame
         {
             buffer.Graphics.DrawString(
                 "The End", new Font(FontFamily.GenericSansSerif, 60, FontStyle.Underline),
-                Brushes.White, GameFunctional.Width / 2 - 200, GameFunctional.Height / 2 - 100);
+                Brushes.White, GameFunctional.Width / 2 - 200, GameFunctional.Height / 2 - 300);
             buffer.Graphics.DrawString(
                 "Your score:" + Ship.ship.Score, new Font(FontFamily.GenericSansSerif, 30),
-                Brushes.Bisque, GameFunctional.Width / 2 - 180, GameFunctional.Height / 2);
+                Brushes.Bisque, GameFunctional.Width / 2 - 180, GameFunctional.Height / 2 - 200);
             buffer.Render();
         }        
     }

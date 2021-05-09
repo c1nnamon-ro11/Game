@@ -16,10 +16,10 @@ namespace FirstGame
         public static bool startGame;
 
         //Class fields 
-        public static int index = 0; //Bullet control (2 types of bullet)
+        public static string texturePackPath = TexturePackLoader.EnteringTexturePack("Galaxy Highways");
 
         //The initial number of objects with the ability to change them during the game
-        static bool controlUp, controlDown, controlRight, controlLeft;
+        static bool controlUp, controlDown, controlRight, controlLeft, isShipDestroyed;
         static int initialNumberOfAsteroids = 5;
         static int initialNumberOfStars = 5;
         static int initialNumberOfRockets = 5;
@@ -32,10 +32,11 @@ namespace FirstGame
         static Timer shotTimer = new Timer();
         static Timer bossShotTimer = new Timer();
         static Timer startGameMenu = new Timer();
+        static Timer destroyShip = new Timer();
 
         //Game fucntional consts
-        private const int SCORE_FOR_BONUS = 150;
-        private const int BOSS_SPAWN_TIME = 500;
+        private const int SCORE_FOR_BONUS = 300;
+        private const int BOSS_SPAWN_TIME = 1000;
 
         //Timer`s values
         private const int GAME_RATE = 10;
@@ -43,6 +44,7 @@ namespace FirstGame
         private const int FIRING_RATE = 1000;
         private const int BOSS_FIRING_RATE = 1000;
         private const int GAME_MENU_RATE = 10;
+        private const int DESTROY_SHIP = 3000;
 
         //Buffers that change and output
         static BufferedGraphicsContext context;
@@ -236,7 +238,7 @@ namespace FirstGame
                     {
                         Bullet.bullets.Add(
                             new Bullet(
-                                new Point(Ship.ship.Rect.X + 10, Ship.ship.Rect.Y + i * 8 + Ship.ship.HeightSize / 2 - 1), new Point(4, 0), new Size(6, 2), true));
+                                new Point(Ship.ship.Rect.X + Ship.ship.WidthSize/2, Ship.ship.Rect.Y + i * 8 + Ship.ship.HeightSize / 2 - 7), new Point(4, 0), new Size(6, 2), true));
                     }
 
                     //Second type of bullets
@@ -244,7 +246,7 @@ namespace FirstGame
                     {
                         Bullet.bullets.Add(
                         new Bullet(
-                            new Point(Ship.ship.Rect.X + 10, Ship.ship.Rect.Y + Ship.ship.HeightSize / 2 - 1), new Point(4, i), new Size(4, 1), false));
+                            new Point(Ship.ship.Rect.X + Ship.ship.WidthSize / 2, Ship.ship.Rect.Y + Ship.ship.HeightSize / 2 - 7), new Point(4, i), new Size(4, 1), false));
                     }
                 }
                 CountPlus();
@@ -295,6 +297,12 @@ namespace FirstGame
             GC.WaitForPendingFinalizers();
             Drawing();
             Update();
+        }
+
+        //Ship destroing adn game ending
+        private static void DestroyShip(object sender, EventArgs e)
+        {
+            Ship.ship.Die();
         }
 
         //Display all objects
@@ -351,6 +359,10 @@ namespace FirstGame
             {
                 Boss.boss.Drawing();
             }
+            foreach (RocketV2 obj in RocketV2.rocketsV2)
+            {
+                if (obj != null) obj.Drawing();
+            }
             foreach (EnemyBullets obj in EnemyBullets.enemyBullets)
             {
                 if (obj != null) obj.Drawing();
@@ -359,14 +371,20 @@ namespace FirstGame
             Background.DisplayOutputGameInformation(buffer, Ship.ship, counter);
         }
 
+
         //Changing the status of objects
         static public void Update()
         {
             //The end
-            if (Ship.ship.Energy <= 0)
+            if (Ship.ship.Energy <= 0 && !isShipDestroyed)
             {
-                Ship.ship.Energy = 0;
-                Ship.ship.Die();
+                isShipDestroyed = true;
+                Ship.DestroyingObject();
+                StopTimers(scoreTimer, shotTimer);
+
+                destroyShip.Interval = DESTROY_SHIP;
+                destroyShip.Start();
+                destroyShip.Tick += DestroyShip;
             }
 
             //Asteroids
@@ -384,7 +402,7 @@ namespace FirstGame
             Star.Interaction();
             if (Star.stars.Count == 0 && !isBossFight)
             {
-                //Star.LoadObjects(initialNumberOfStars);
+                Star.LoadObjects(initialNumberOfStars);
                 initialNumberOfStars++;
             }
 
@@ -406,10 +424,11 @@ namespace FirstGame
 
             //Boss
             Boss.Interaction();
-            if(Boss.boss != null && Boss.boss.ulta && Boss.boss.Power < Boss.DEFAULT_POWER/2)
+            //if(Boss.boss != null && Boss.boss.ulta && Boss.boss.Power < Boss.DEFAULT_POWER/2)
+            if(Boss.boss != null && Boss.boss.ulta)
             {
                 Boss.boss.ulta = false;
-                Rocket.LoadObjects(30);
+                RocketV2.LoadObjects(15);
             }
 
             if (!isBossFight && Ship.ship.BossTime >= BOSS_SPAWN_TIME)
@@ -420,6 +439,9 @@ namespace FirstGame
 
             //Enemy Bullets
             EnemyBullets.Interaction();
+
+            //RocketV2
+            RocketV2.Interaction();           
 
             //Visual Effects
             VisualEffect.Interaction();
@@ -458,9 +480,7 @@ namespace FirstGame
         static public void Finish()
         {
             //Stop all timers
-            StopTimers(timer, scoreTimer, shotTimer, bossShotTimer);
-
-            MusicEffects.MusicStopMethod();
+            StopTimers(timer, bossShotTimer, destroyShip);
             //Display information
             Background.DisplayFinishGameStats(buffer);
             //ScoreMenu

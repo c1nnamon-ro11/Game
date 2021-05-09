@@ -61,6 +61,7 @@
     <Compile Include="GameObjects\Boss.cs" />
     <Compile Include="GameObjects\Bullet.cs" />
     <Compile Include="GameObjects\EnemyBullets.cs" />
+    <Compile Include="GameObjects\RocketV2.cs" />
     <Compile Include="MusicEffects.cs" />
     <Compile Include="GameObjects\BaseObject.cs" />
     <Compile Include="GameFunctional.cs" />
@@ -75,6 +76,7 @@
     <Compile Include="GameObjects\Ship.cs" />
     <Compile Include="GameObjects\Star.cs" />
     <Compile Include="GameObjects\VisualEffects.cs" />
+    <Compile Include="TexturePackLoader.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
@@ -119,37 +121,85 @@
     </COMReference>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Content\pictures\asteroid.png">
+    <Content Include="Content\Pictures\asteroidCharge\asteroidCharge3.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\pictures\bonus.png">
+    <Content Include="Content\Pictures\asteroidCharge\asteroidCharge2.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\pictures\bullet2.png">
+    <Content Include="Content\Pictures\rocketV2.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\pictures\charge.png">
+    <Content Include="Content\Pictures\asteroid\asteroid4.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\pictures\fireball2.png">
+    <Content Include="Content\Pictures\asteroid\asteroid3.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\pictures\bullet1.png">
+    <Content Include="Content\Pictures\asteroid\asteroid2.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\pictures\boss.png">
+    <Content Include="Content\Pictures\asteroid\asteroid1.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\pictures\planet.png">
+    <Content Include="Content\Pictures\bonus.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\pictures\rocket.png">
+    <Content Include="Content\Pictures\bullet2.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\pictures\ship.png">
+    <Content Include="Content\Pictures\asteroidCharge\asteroidCharge1.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\pictures\star.png">
+    <Content Include="Content\Pictures\enemyBullet.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\Pictures\bullet1.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\Pictures\boss.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\Pictures\planet.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\Pictures\rocket.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\Pictures\ship.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\TexturePack - Galaxy Highways\asteroidCharge\asteroidCharge1.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\TexturePack - Galaxy Highways\asteroidCharge\asteroidCharge2.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\TexturePack - Galaxy Highways\asteroidCharge\asteroidCharge3.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\TexturePack - Galaxy Highways\asteroid\asteroid1.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\TexturePack - Galaxy Highways\asteroid\asteroid2.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\TexturePack - Galaxy Highways\asteroid\asteroid3.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\TexturePack - Galaxy Highways\asteroid\asteroid4.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\TexturePack - Galaxy Highways\bonus.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\TexturePack - Galaxy Highways\bullet1.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\TexturePack - Galaxy Highways\bullet2.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\Pictures\star.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Content\Scoreboard\Scoreboard.txt">
@@ -177,6 +227,27 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Content\Sounds\Shot.mp3">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\TexturePack - Galaxy Highways\enemyBullet.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\TexturePack - Galaxy Highways\object2.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\TexturePack - Galaxy Highways\ship.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\TexturePack - Galaxy Highways\star.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\TexturePack - Galaxy Highways\rocket.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\TexturePack - Galaxy Highways\rocketV2.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\TexturePack - Galaxy Highways\boss.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="ship.ico">

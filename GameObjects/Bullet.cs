@@ -12,8 +12,8 @@ namespace FirstGame
         private bool isSuperBullet;
 
         //Images at screen
-        Image defaultBullet = Image.FromFile("Content\\pictures\\bullet1.png");
-        Image upgradeBullet = Image.FromFile("Content\\pictures\\bullet2.png");
+        Image defaultBullet = Image.FromFile(GameFunctional.texturePackPath + "bullet1.png");
+        Image upgradeBullet = Image.FromFile(GameFunctional.texturePackPath + "bullet2.png");
 
         //Overloading (2 types of bullets)
         public override int Power

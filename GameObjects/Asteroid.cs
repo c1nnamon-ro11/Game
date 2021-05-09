@@ -9,44 +9,63 @@ namespace FirstGame
         //Class spawn variables
         public static List<Asteroid> asteroids = new List<Asteroid>();
         private static Random rnd = new Random();
+        private static Random r = new Random();
 
         //Image at screen
-        static Image img = Image.FromFile("Content\\pictures\\asteroid.png");
+        Image asteroidImg = ChooseObjectSkin(); 
 
         //Default object characteristics
         const int DEFAULT_POWER = 100;
         const int DEFAULT_DAMAGE = 15;
-        readonly int DEFAULT_WIDTH = img.Width;
-        readonly int DEFAULT_HEIGHT = img.Height;
 
         //Constructors
         public Asteroid(Point pos, Point dir) : base(pos, dir)
         {
+            size = new Size(asteroidImg.Width, asteroidImg.Height);
             power = DEFAULT_POWER;
             damage = DEFAULT_DAMAGE;
-            size = new Size(DEFAULT_WIDTH, DEFAULT_HEIGHT);
         }
 
         public Asteroid(Point pos, Point dir, Size size) : base(pos, dir, size)
         {
+            asteroidImg = ChooseObjectSkin();
             power = DEFAULT_POWER;
             damage = DEFAULT_DAMAGE;
         }
 
         public Asteroid(Point pos, Point dir, int power, int damage) : base(pos, dir, power, damage)
         {
-            size = new Size(DEFAULT_WIDTH, DEFAULT_HEIGHT);
+            asteroidImg = ChooseObjectSkin();
+            size = new Size(asteroidImg.Width, asteroidImg.Height);
         }
 
         public Asteroid(Point pos, Point dir, Size size, int power, int damage) : base(pos, dir, size, power, damage)
         {
+            asteroidImg = ChooseObjectSkin();
         }
+
+        //Choosing random skin for current object
+        static private Image ChooseObjectSkin()
+        {
+            switch (r.Next(1, 4))
+            {
+                case 1:
+                    return Image.FromFile(GameFunctional.texturePackPath + "asteroid\\asteroid1.png");                   
+                case 2:
+                    return Image.FromFile(GameFunctional.texturePackPath + "asteroid\\asteroid2.png");
+                case 3:
+                    return Image.FromFile(GameFunctional.texturePackPath + "asteroid\\asteroid3.png");
+                case 4:
+                    return Image.FromFile(GameFunctional.texturePackPath + "asteroid\\asteroid4.png");
+                default:
+                    return Image.FromFile(GameFunctional.texturePackPath + "asteroid\\asteroid1.png");
+            }            
+        } 
 
         //Drawing at game screen
         override public void Drawing()
-        {
-            GameFunctional.buffer.Graphics.DrawImage
-                (img, pos);
+        {            
+            GameFunctional.buffer.Graphics.DrawImage(asteroidImg, pos);
         }
 
         //Calculating new position of object
@@ -64,9 +83,12 @@ namespace FirstGame
         }
 
         //Procedure before removing game object from gamescreen
-        public void DestroyingObject(Asteroid asteroid)
+        public void DestroyingObject(Asteroid asteroid, bool isDestroyedByBullet = true)
         {
-            AsteroidCharge.LoadAsteroidCharges(asteroid.PosX, asteroid.PosY, asteroid.HeightSize, asteroid.WidthSize, 1);
+            if (isDestroyedByBullet)
+            {
+                AsteroidCharge.LoadAsteroidCharges(asteroid.PosX, asteroid.PosY, asteroid.HeightSize, asteroid.WidthSize, 1);
+            }          
             VisualEffect.LoadObjects(
                                 asteroid.PosX + asteroid.WidthSize / 2, asteroid.PosY + asteroid.HeightSize / 2, 2); //Spawn in place of the object"visual effects"
             Ship.ship.ScoreUp(DEFAULT_POWER);
@@ -82,7 +104,7 @@ namespace FirstGame
         {
             foreach (var asteroid in asteroids)
             {
-                asteroid.Update();
+                asteroid.Update();               
                 if (GameFunctional.startGame)
                 {
                     //Collision of object and bullet  
@@ -106,7 +128,7 @@ namespace FirstGame
                         asteroid.Power = 0;
                         Ship.ship.EnergyLow(asteroid.Damage);
                         Ship.ship.LvlUp(-1);
-                        asteroid.DestroyingObject(asteroid);
+                        asteroid.DestroyingObject(asteroid, false);                        
                     }
                 }
             }
