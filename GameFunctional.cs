@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Windows.Forms;
 using System.Drawing;
-using System.Collections.Generic;
 
 namespace FirstGame
 {
@@ -25,6 +24,7 @@ namespace FirstGame
         static int initialNumberOfRockets = 5;
         public static int bonusTime = 1;
         public static bool isBossFight = false; //boss flag
+        public static bool isPlasmaWeapon;
 
         //Random number generation and timers for screen refresh, points, automatic player and boss shots
         static Timer timer = new Timer();
@@ -35,8 +35,8 @@ namespace FirstGame
         static Timer destroyShip = new Timer();
 
         //Game fucntional consts
-        private const int SCORE_FOR_BONUS = 300;
-        private const int BOSS_SPAWN_TIME = 1000;
+        private const int SCORE_FOR_BONUS = 500;
+        private const int BOSS_SPAWN_TIME = 3000;
 
         //Timer`s values
         private const int GAME_RATE = 10;
@@ -72,11 +72,11 @@ namespace FirstGame
             grx = GameScreen.CreateGraphics();
             Width = GameScreen.Width;
             Height = GameScreen.Height;
-            buffer = context.Allocate(grx, new Rectangle(0, 0, Width, Height));
+            buffer = context.Allocate(grx, new Rectangle(0, 0, Width, Height));            
             Load();     //Initial loading of objects
             Timer();    //Initialize and run all timers
             startGameMessage();
-
+            
             //Events           
             Ship.MessageDie += Finish;                  //End Game
             if (!Controller.IsControlerConnected)
@@ -238,7 +238,7 @@ namespace FirstGame
                     {
                         Bullet.bullets.Add(
                             new Bullet(
-                                new Point(Ship.ship.Rect.X + Ship.ship.WidthSize/2, Ship.ship.Rect.Y + i * 8 + Ship.ship.HeightSize / 2 - 7), new Point(4, 0), new Size(6, 2), true));
+                                new Point(Ship.ship.Rect.X + Ship.ship.WidthSize/2, Ship.ship.Rect.Y + i * 8 + Ship.ship.HeightSize / 2 - 7), new Point(4, 0), new Size(25, 15), true));//6,2
                     }
 
                     //Second type of bullets
@@ -246,7 +246,7 @@ namespace FirstGame
                     {
                         Bullet.bullets.Add(
                         new Bullet(
-                            new Point(Ship.ship.Rect.X + Ship.ship.WidthSize / 2, Ship.ship.Rect.Y + Ship.ship.HeightSize / 2 - 7), new Point(4, i), new Size(4, 1), false));
+                            new Point(Ship.ship.Rect.X + Ship.ship.WidthSize / 2, Ship.ship.Rect.Y + Ship.ship.HeightSize / 2 - 7), new Point(4, i), new Size(14, 7), false)); //4,1
                     }
                 }
                 CountPlus();
@@ -269,7 +269,11 @@ namespace FirstGame
             {
                 int numberOfBullets = 2; //parameter number of bullets per tick
                 EnemyBullets.LoadObjects(Boss.boss.PosX, Boss.boss.PosY, Boss.boss.WidthSize, Boss.boss.HeightSize, numberOfBullets);
-
+                if (isPlasmaWeapon)
+                {
+                    BossWeapon.LoadObjects(Boss.boss.PosX, Boss.boss.PosY, Boss.boss.WidthSize, Boss.boss.HeightSize);
+                } 
+                isPlasmaWeapon = !isPlasmaWeapon;
             }
         }
 
@@ -367,6 +371,10 @@ namespace FirstGame
             {
                 if (obj != null) obj.Drawing();
             }
+            foreach (BossWeapon obj in BossWeapon.bossWeapons)
+            {
+                if (obj != null) obj.Drawing();
+            }
             //Output game information (HP of the ship, number of points, number of shots)
             Background.DisplayOutputGameInformation(buffer, Ship.ship, counter);
         }
@@ -439,6 +447,9 @@ namespace FirstGame
 
             //Enemy Bullets
             EnemyBullets.Interaction();
+
+            //Boss weapon
+            BossWeapon.Interaction();
 
             //RocketV2
             RocketV2.Interaction();           

@@ -89,7 +89,9 @@ namespace FirstGame
         {
             enemyBullets.RemoveAll(item => item.Power <= 0);
             enemyBullets.RemoveAll(
-                item => (item.PosX > GameFunctional.Width || item.PosX < 0 || item.PosY > GameFunctional.Height || item.PosY <0));
+                item => 
+                (item.PosX > GameFunctional.Width || item.PosX+item.WidthSize < 0 ||
+                item.PosY - item.HeightSize > GameFunctional.Height || item.PosY < 0));
         }
 
         //Loading EnemyBullets
@@ -101,9 +103,11 @@ namespace FirstGame
                 {
                     if (ich == 0 && jch == 0) { continue; }
                     if (Math.Abs(ich) + Math.Abs(jch) == numberOfBullets + 1 || (ich == 0 && Math.Abs(jch) == numberOfBullets) || (jch == 0 && Math.Abs(ich) == numberOfBullets))
-                        enemyBullets.Add(new EnemyBullets(
-                            new Point(posX + posSizeWidth / 2 + ich * posSizeWidth / 4, posY + posSizeHeigth / 2 + jch * posSizeHeigth / 4),
-                            new Point(2 * ich, 2 * jch), new Size(20, 14)));
+                        enemyBullets.Add(new EnemyBullets(                            
+                            new Point(
+                                posX + posSizeWidth / 2 + ich * posSizeWidth / 4 - img.Width/2,
+                                posY + posSizeHeigth / 2 + jch * posSizeHeigth / 4 - img.Height/2),
+                            new Point(2 * ich, 2 * jch)));
                 }
             }
             MusicEffects.BossShotSound();

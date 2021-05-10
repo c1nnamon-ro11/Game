@@ -14,7 +14,7 @@ namespace FirstGame
         static Image img = Image.FromFile(GameFunctional.texturePackPath + "boss.png");
 
         //Default object characteristics
-        public const int DEFAULT_POWER = 300;
+        public const int DEFAULT_POWER = 2000;
         public const int DEFAULT_DAMAGE = int.MaxValue;
         static readonly int DEFAULT_WIDTH = img.Width;
         static readonly int DEFAULT_HEIGHT = img.Height;
@@ -59,7 +59,7 @@ namespace FirstGame
             pos.Y = pos.Y + dir.Y;
 
             if (pos.X < GameFunctional.Width / 2) dir.X = rnd.Next(2, 5);
-            if (pos.X > GameFunctional.Width - HeightSize) dir.X = -rnd.Next(2, 5);
+            if (pos.X + WidthSize > GameFunctional.Width ) dir.X = -rnd.Next(2, 5);
             if (pos.Y < 0) dir.Y = rnd.Next(2, 5);
             if (pos.Y > GameFunctional.Height - WidthSize) dir.Y = -rnd.Next(2, 5);
         }

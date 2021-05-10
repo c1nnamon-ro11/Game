@@ -7,9 +7,9 @@ namespace FirstGame
     {
         //Background
         static public void BackGround()
-        {
+        {           
             GameFunctional.buffer.Graphics.DrawImage
-                (Image.FromFile("Content\\pictures\\planet.png"), new Rectangle(1000, 100, 100, 100));
+                (Image.FromFile(GameFunctional.texturePackPath+"planet.png"), new Rectangle(1000, 100, 100, 100));
 
             //"Star`s effect"
             Random rnd = new Random();
@@ -21,7 +21,7 @@ namespace FirstGame
                 coorX[i] = rnd.Next(0, GameFunctional.Width);
                 coorY[i] = rnd.Next(0, GameFunctional.Height);
                 GameFunctional.buffer.Graphics.FillEllipse(Brushes.Bisque, new Rectangle(coorX[i], coorY[i], 2, 2));
-            }
+            }           
         }
 
         //Display game info at top of the gamescreen
@@ -40,8 +40,8 @@ namespace FirstGame
         static public void DisplayFinishGameStats(BufferedGraphics buffer)
         {
             buffer.Graphics.DrawString(
-                "The End", new Font(FontFamily.GenericSansSerif, 60, FontStyle.Underline),
-                Brushes.White, GameFunctional.Width / 2 - 200, GameFunctional.Height / 2 - 300);
+                "Game over", new Font(FontFamily.GenericSansSerif, 60, FontStyle.Underline),
+                Brushes.White, GameFunctional.Width / 2 - 250, GameFunctional.Height / 2 - 300);
             buffer.Graphics.DrawString(
                 "Your score:" + Ship.ship.Score, new Font(FontFamily.GenericSansSerif, 30),
                 Brushes.Bisque, GameFunctional.Width / 2 - 180, GameFunctional.Height / 2 - 200);

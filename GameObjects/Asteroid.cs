@@ -149,7 +149,7 @@ namespace FirstGame
                 int speedX = rnd.Next(2, 7);
                 int speedY = rnd.Next(2, 7);
                 asteroids.Add(new Asteroid(
-                    new Point(GameFunctional.Width + rnd.Next(100, 400), GameFunctional.Height / 2 - rnd.Next(-200, 200)),
+                    new Point(GameFunctional.Width + rnd.Next(100, 400), GameFunctional.Height / 2 - rnd.Next(-150, 150)),
                     new Point(-speedX, speedY)));
             }
         }
