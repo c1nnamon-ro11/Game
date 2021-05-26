@@ -14,7 +14,6 @@ namespace FirstGame
             GameFunctional.Initialization(GameScreen);
             //Screen`s name
             GameScreen.Text = "Asteroid Belt";
-
             GameScreen.Show();
             GameFunctional.Drawing();
             Application.Run(GameScreen);
