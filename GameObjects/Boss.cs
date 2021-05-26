@@ -14,7 +14,7 @@ namespace FirstGame
         static Image img = Image.FromFile(GameFunctional.texturePackPath + "boss.png");
 
         //Default object characteristics
-        public const int DEFAULT_POWER = 2000;
+        public const int DEFAULT_POWER = 200;
         public const int DEFAULT_DAMAGE = int.MaxValue;
         static readonly int DEFAULT_WIDTH = img.Width;
         static readonly int DEFAULT_HEIGHT = img.Height;

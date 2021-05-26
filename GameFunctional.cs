@@ -36,7 +36,7 @@ namespace FirstGame
 
         //Game fucntional consts
         private const int SCORE_FOR_BONUS = 500;
-        private const int BOSS_SPAWN_TIME = 3000;
+        private const int BOSS_SPAWN_TIME = 300;
 
         //Timer`s values
         private const int GAME_RATE = 10;
